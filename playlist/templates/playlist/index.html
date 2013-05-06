@@ -19,6 +19,7 @@
   <script type="text/javascript">
 
     $(document).ready(function(){
+
       console.log("running"); 
       song_list = []
       {% if song_list %}
@@ -26,9 +27,21 @@
           showList({{ song_list }});
         {% endautoescape %}
       {% else %}
-        console.log("Error: could not load song list.")
+        console.log("Error: could not load song list.");
       {% endif %}
+
+      $('.upvotebutton').click(function() {
+          var id = $(this).attr('id');
+          if (CACHED_VOTES[id] === undefined) {
+            CACHED_VOTES[id] = 1;
+          } else {
+            CACHED_VOTES[id] += 1;
+          }
+          console.log(CACHED_VOTES);
+      })
+
     })
+
   </script>
 
 </head>

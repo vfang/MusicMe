@@ -39,4 +39,4 @@ if __name__ == "__main__":
 		songlist.append(SongContainer("The World Is Yours","Nas",20))
 		songlist.append(SongContainer("Help!","The Beatles",10))
 		songlist.append(SongContainer("The End","The Doors",100))
-		print(make_song_json_list(songlist))
+		print make_song_json_list(songlist)
