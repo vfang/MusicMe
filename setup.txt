@@ -1,0 +1,8 @@
+If you pulled an older version of the repo, you probably have a bunch of .pyc files in playlist/* and MusicMe/*. 
+These are precompiled python files, I added them to the .gitignore but you may already be "tracking" them on your
+local machine, which means git will try to add these files to the repo again when you commit, even though they should
+be ignored. To solve this, run
+
+git rm <file>.pyc --cached 
+
+for all the pyc files. This will keep the files on your local machine but tell git not to track them.
