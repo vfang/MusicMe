@@ -14,6 +14,22 @@
   <link rel="stylesheet" type="text/css" href="{% static "playlist/css/normalize.css" %}">
 
   <script src="{% static "playlist/js/vendor/custom.modernizr.js" %}"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+      console.log("running"); 
+      song_list = []
+      {% if song_list %}
+        {% autoescape off %}
+          showList({{ song_list }});
+        {% endautoescape %}
+      {% else %}
+        console.log("Error: could not load song list.")
+      {% endif %}
+    })
+  </script>
 
 </head>
 <body>

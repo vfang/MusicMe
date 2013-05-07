@@ -9,7 +9,7 @@ class SongContainer:
 	## return a JSON representation of this object
 	def writeToJSON(self):
 		json = {}
-		json["title"] = self.title
+		json["songtitle"] = self.title
 		json["artist"] = self.artist
 		json["votecount"] = self.votecount
 		return json
