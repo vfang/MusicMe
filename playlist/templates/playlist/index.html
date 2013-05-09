@@ -14,11 +14,27 @@
   <link rel="stylesheet" type="text/css" href="{% static "playlist/css/normalize.css" %}">
 
   <script src="{% static "playlist/js/vendor/custom.modernizr.js" %}"></script>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{% static "playlist/js/vendor/jquery.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/musicme.js" %}"></script>
   
   <script type="text/javascript">
 
     $(document).ready(function(){
+
+      // check if a dictionary is empty
+      function isEmpty(dict) {
+        for (var prop in dict) {
+          if (dict.hasOwnProperty(prop)) {
+            return false;
+          }
+          }
+          return true;
+      }
+
+      // dictionary with key=songid, value=votecount
+      var CACHED_VOTES = {}
+      // refresh every minute
+      var REFRESH_INTERVAL = 10000
 
       console.log("running"); 
       song_list = []
@@ -30,6 +46,7 @@
         console.log("Error: could not load song list.");
       {% endif %}
 
+      // event handler for click on upvote button
       $('.upvotebutton').click(function() {
           var id = $(this).attr('id');
           if (CACHED_VOTES[id] === undefined) {
@@ -39,6 +56,18 @@
           }
           console.log(CACHED_VOTES);
       })
+
+      // timer to flush cache and refresh
+      setInterval(function(){
+        if (isEmpty(CACHED_VOTES) == false) {
+          {% load update_cache %}
+          //song_list = {{ CACHED_VOTES|update_votes }};
+        }
+        clearList();
+        {% autoescape off %}
+          showList({{ song_list }});
+        {% endautoescape %}
+      },REFRESH_INTERVAL);
 
     })
 
@@ -144,7 +173,5 @@
       </div>
     </div>
   </footer> -->
-  <script type="text/javascript" src="{% static "playlist/js/vendor/jquery.js" %}"></script>
-  <script type="text/javascript" src="{% static "playlist/js/musicme.js" %}"></script>
 </body>
 </html>

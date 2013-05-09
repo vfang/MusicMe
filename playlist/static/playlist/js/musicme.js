@@ -1,6 +1,3 @@
-// dictionary with key=songid, value=votecount
-var CACHED_VOTES = {}
-
 function createUpvoteBtn(ele) {
 	return "<div class='upvotebuttonContainer'><button class='tiny button success radius upvotebutton' id=" + ele.songid + ">^</button></div>";
 }
