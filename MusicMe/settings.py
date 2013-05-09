@@ -10,14 +10,14 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'musicme.db',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'MoritzGellner',
-        'PASSWORD': '',
-        'HOST': '',                      # Set to empty string for default.
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'd5ifos4j3idbrr',
+    'HOST': 'ec2-54-235-243-35.compute-1.amazonaws.com',
+    'PORT': 5432,
+    'USER': 'uyfidhamzmjxlo',
+    'PASSWORD': '5ll33iXUCwnj3HUntkHnUd9St-'
+  }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
