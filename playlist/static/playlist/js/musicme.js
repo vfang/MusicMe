@@ -1,5 +1,5 @@
 function createUpvoteBtn(ele) {
-	return "<div class='upvotebuttonContainer'><button class='tiny button success radius upvotebutton' id=" + ele.songid + ">^</button></div>";
+	return "<div class='upvotebuttonContainer'><button class='tiny button success radius upvotebutton' id=up_" + ele.songid + ">^</button></div>";
 }
 
 function createPlaylistElement(ele){
@@ -13,5 +13,5 @@ function clearList() {
 }
 
 function createDownBtn(ele){
-	return "<div class='downvotebuttonContainer'><button class='tiny button success radius downvotebutton' id=down" + ele.songid + ">v</button></div>";
+	return "<div class='downvotebuttonContainer'><button class='tiny button alert radius downvotebutton' id=down_" + ele.songid + ">v</button></div>";
 }
