@@ -14,6 +14,92 @@
   <link rel="stylesheet" type="text/css" href="{% static "playlist/css/normalize.css" %}">
 
   <script src="{% static "playlist/js/vendor/custom.modernizr.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/vendor/jquery.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/musicme.js" %}"></script>
+  
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+
+      var SONG_LIST = [];
+      var UPVOTE_DELAY = 20000;
+
+      // check if a dictionary is empty
+      function isEmpty(dict) {
+        for (var prop in dict) {
+          if (dict.hasOwnProperty(prop)) {
+            return false;
+          }
+          }
+          return true;
+      }
+
+      // dictionary with key=songid, value=votecount
+      var CACHED_VOTES = {}
+      // refresh every minute
+      var REFRESH_INTERVAL = 10000
+
+      console.log("running");
+      {% if song_list %}
+        {% autoescape off %}
+          SONG_LIST = {{song_list}};
+          showList(SONG_LIST);
+        {% endautoescape %}
+      {% else %}
+        console.log("Error: could not load song list.");
+      {% endif %}
+
+      // timer to flush cache and refresh
+      /*setInterval(function(){
+        if (isEmpty(CACHED_VOTES) == false) {
+          {% load update_cache %}
+          //song_list = {{ CACHED_VOTES|update_votes }};
+        }
+        CACHED_VOTES = {};
+        {% autoescape off %}
+          showList({{ song_list }});
+        {% endautoescape %}
+      },REFRESH_INTERVAL);
+    */
+    function showList(list) {
+      var html = "";
+      list.sort(function(a,b) {
+        if (a.votecount > b.votecount)
+          return -1;
+        if (a.votecount < b.votecount)
+          return 1;
+        return 0;
+      });
+      for(var i in list) {
+        html += createPlaylistElement(list[i]);
+        console.log(html);
+      }
+
+      $('#playlist').append(html);
+      // event handler for click on upvote button
+          $('.upvotebutton').click(function() {
+              var id = $(this).attr('id');
+              // for now, just update the vote count from the cache entirely on the front end
+                for (var i in SONG_LIST) {
+                  console.log(SONG_LIST[i].songid);
+                  if (SONG_LIST[i].songid == id) {
+                    SONG_LIST[i].votecount += 1;
+                  }
+                }
+                clearList();
+                showList(SONG_LIST);
+
+              // only allow upvoting once per song per time interval
+              // need to use getElementById because the list is destroyed and redrawn, so $(this) does not work
+              document.getElementById(id).disabled = true; 
+              setTimeout(function() {
+                document.getElementById(id).disabled = false; 
+              },UPVOTE_DELAY);
+          })
+    }
+
+  })
+  </script>
 
 </head>
 <body>
@@ -115,7 +201,5 @@
       </div>
     </div>
   </footer> -->
-  <script type="text/javascript" src="{% static "playlist/js/vendor/jquery.js" %}"></script>
-  <script type="text/javascript" src="{% static "playlist/js/musicme.js" %}"></script>
 </body>
 </html>

@@ -1,3 +1,11 @@
 #playlistarea {
 	float: left;
 }
+
+.upvotebuttonContainer {
+	float: right;
+}
+
+.songinfo {
+	float: left;
+}
