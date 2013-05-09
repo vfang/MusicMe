@@ -62,10 +62,18 @@
     */
     function showList(list) {
       var html = "";
-      for(var i in list){
+      list.sort(function(a,b) {
+        if (a.votecount > b.votecount)
+          return -1;
+        if (a.votecount < b.votecount)
+          return 1;
+        return 0;
+      });
+      for(var i in list) {
         html += createPlaylistElement(list[i]);
         console.log(html);
       }
+
       $('#playlist').append(html);
       // event handler for click on upvote button
           $('.upvotebutton').click(function() {
