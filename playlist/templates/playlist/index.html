@@ -88,12 +88,12 @@
                 }
                 clearList();
                 showList(SONG_LIST);
-                
+
               // only allow upvoting once per song per time interval
               // need to use getElementById because the list is destroyed and redrawn, so $(this) does not work
               document.getElementById(id).disabled = true; 
               setTimeout(function() {
-                document.getElementById(id).disabled = true; 
+                document.getElementById(id).disabled = false; 
               },UPVOTE_DELAY);
           })
     }
