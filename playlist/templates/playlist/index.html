@@ -21,6 +21,8 @@
 
     $(document).ready(function(){
 
+      var SONG_LIST = [];
+
       // check if a dictionary is empty
       function isEmpty(dict) {
         for (var prop in dict) {
@@ -36,41 +38,56 @@
       // refresh every minute
       var REFRESH_INTERVAL = 10000
 
-      console.log("running"); 
-      song_list = []
+      console.log("running");
       {% if song_list %}
         {% autoescape off %}
-          showList({{ song_list }});
+          SONG_LIST = {{song_list}};
+          showList(SONG_LIST);
         {% endautoescape %}
       {% else %}
         console.log("Error: could not load song list.");
       {% endif %}
 
-      // event handler for click on upvote button
-      $('.upvotebutton').click(function() {
-          var id = $(this).attr('id');
-          if (CACHED_VOTES[id] === undefined) {
-            CACHED_VOTES[id] = 1;
-          } else {
-            CACHED_VOTES[id] += 1;
-          }
-          console.log(CACHED_VOTES);
-      })
-
       // timer to flush cache and refresh
-      setInterval(function(){
+      /*setInterval(function(){
         if (isEmpty(CACHED_VOTES) == false) {
           {% load update_cache %}
           //song_list = {{ CACHED_VOTES|update_votes }};
         }
-        clearList();
+        CACHED_VOTES = {};
         {% autoescape off %}
           showList({{ song_list }});
         {% endautoescape %}
       },REFRESH_INTERVAL);
-
-    })
-
+    */
+    function showList(list) {
+      var html = "";
+      for(var i in list){
+        html += createPlaylistElement(list[i]);
+        console.log(html);
+      }
+      $('#playlist').append(html);
+      // event handler for click on upvote button
+          $('.upvotebutton').click(function() {
+              var id = $(this).attr('id');
+              // for now, just update the vote count from the cache entirely on the front end
+                for (var i in SONG_LIST) {
+                  console.log(SONG_LIST[i].songid);
+                  if (SONG_LIST[i].songid == id) {
+                    SONG_LIST[i].votecount += 1;
+                  }
+                }
+                clearList();
+                showList(SONG_LIST);
+              /*
+              if (CACHED_VOTES[id] === undefined) {
+                CACHED_VOTES[id] = 1;
+              } else {
+                CACHED_VOTES[id] += 1;
+              }*/
+          })
+    }
+  })
   </script>
 
 </head>

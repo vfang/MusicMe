@@ -7,11 +7,6 @@ function createPlaylistElement(ele){
 	return html; 
 }
 
-function showList(list) {
-	var html = "";
-	for(var i in list){
-		html += createPlaylistElement(list[i]);
-		console.log(html);
-	}
-	$('#playlist').append(html);
+function clearList() {
+	$('#playlist').empty();
 }
