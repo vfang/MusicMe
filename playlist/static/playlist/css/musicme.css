@@ -6,6 +6,10 @@
 	float: right;
 }
 
+.downvotebuttonContainer {
+	float: right;
+}
+
 .songinfo {
 	float: left;
 }

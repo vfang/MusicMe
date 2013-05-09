@@ -44,6 +44,7 @@
         {% autoescape off %}
           SONG_LIST = {{song_list}};
           showList(SONG_LIST);
+          // console.log(SONG_LIST);
         {% endautoescape %}
       {% else %}
         console.log("Error: could not load song list.");
@@ -72,7 +73,7 @@
       });
       for(var i in list) {
         html += createPlaylistElement(list[i]);
-        console.log(html);
+        //console.log(html);
       }
 
       $('#playlist').append(html);
@@ -81,9 +82,33 @@
               var id = $(this).attr('id');
               // for now, just update the vote count from the cache entirely on the front end
                 for (var i in SONG_LIST) {
-                  console.log(SONG_LIST[i].songid);
+                  //console.log(SONG_LIST[i].songid);
                   if (SONG_LIST[i].songid == id) {
                     SONG_LIST[i].votecount += 1;
+                  }
+                }
+                clearList();
+                showList(SONG_LIST);
+
+              // only allow upvoting once per song per time interval
+              // need to use getElementById because the list is destroyed and redrawn, so $(this) does not work
+              document.getElementById(id).disabled = true; 
+              setTimeout(function() {
+                document.getElementById(id).disabled = false; 
+              },UPVOTE_DELAY);
+          })
+          $('.downvotebutton').click(function() {
+              var id = $(this).attr('id');
+              console.log(id)
+              // var id = "11";
+              // for now, just update the vote count from the cache entirely on the front end
+                for (var i in SONG_LIST) {
+                  //console.log(SONG_LIST[i].songid);
+                  console.log(SONG_LIST[i].songid);
+                  if ('down'+SONG_LIST[i].songid == id) {
+                    console.log("here")
+
+                    SONG_LIST[i].votecount -= 1;
                   }
                 }
                 clearList();
