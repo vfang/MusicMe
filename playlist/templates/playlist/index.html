@@ -82,8 +82,21 @@
             //console.log(SONG_LIST[i].songid);
             if (SONG_LIST[i].songid == id) {
               SONG_LIST[i].votecount += delta;
-              if (delta > 0) SONG_LIST[i].upbtndisable = "disable";
-              else SONG_LIST[i].downbtndisable = "disable";
+              if (delta > 0) {
+                if (SONG_LIST[i].downbtndisable == "disable")
+                  SONG_LIST[i].votecount += delta;
+                
+                SONG_LIST[i].upbtndisable = "disable";
+                SONG_LIST[i].downbtndisable = "enable" ;
+              }
+              else {
+                if (SONG_LIST[i].upbtndisable == "disable")
+                  SONG_LIST[i].votecount += delta;
+
+                SONG_LIST[i].upbtndisable = "enable";
+                SONG_LIST[i].downbtndisable = "disable";
+
+              }
             }
           }
           clearList();
