@@ -9,17 +9,21 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'd5ifos4j3idbrr',
-    'HOST': 'ec2-54-235-243-35.compute-1.amazonaws.com',
-    'PORT': 5432,
-    'USER': 'uyfidhamzmjxlo',
-    'PASSWORD': '5ll33iXUCwnj3HUntkHnUd9St-'
-  }
-}
-
+if not os.environ.has_key('DATABASE_URL'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'musicme.db',                      # Or path to database file if using sqlite3.
+            # The following settings are not used with sqlite3:
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+            'PORT': '',                      # Set to empty string for default.
+        }
+    }
+else:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
