@@ -1,3 +1,5 @@
+import os
+
 # Django settings for MusicMe project.
 
 DEBUG = True
