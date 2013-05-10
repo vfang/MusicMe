@@ -3,3 +3,6 @@
 
 # Mac Finder artifacts
 *.DS_Store
+
+# virtualenv
+venv
