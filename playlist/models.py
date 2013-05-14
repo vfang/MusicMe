@@ -3,13 +3,30 @@ from django.db import models
 import hashlib
 
 ## Container object for a song
-class SongContainer:
-	def __init__(self,title,artist,votecount=0):
+class SongContainer(models.Model):
+	title = models.CharField(max_length=200)
+	artist = models.CharField(max_length=200)
+	albumTitle = models.CharField(max_length=200)
+	albumArtUrl = models.CharField(max_length=500)
+	votecount = models.IntegerField(default=0)
+	downcount = models.IntegerField(default=0)
+	upcount = models.IntegerField(default=0)
+
+	songid = models.CharField(max_length=200)
+
+	upbtndisable = models.BooleanField(default=False)
+	downbtndisable = models.BooleanField(default=False)
+
+	created_at = models.DateTimeField(auto_now_add=True)
+
+
+	def __init__(self,title,artist,album,votecount=0):
 		self.title = title
 		self.artist = artist
+		self.album = album		
 		self.votecount = votecount
 		# unique 160-bit id
-		self.songid = hashlib.sha256(title.encode('utf-8')).hexdigest()
+		self.songid = hashlib.sha256((title+artist).encode('utf-8')).hexdigest()
 		self.upbtndisable = "enable"
 		self.downbtndisable = "enable"
 	## return a JSON representation of this object
@@ -27,4 +44,3 @@ class SongContainer:
 	def updateVoteCount(delta): 
 		self.votecount += delta
 		return
-
