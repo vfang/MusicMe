@@ -1,3 +1,5 @@
+var votes = new Object();
+
 function createUpvoteBtn(ele) {
 	return "<div class='upvotebuttonContainer'><button class='tiny button success radius upvotebutton' id=up_" + ele.songid + ">^</button></div>";
 }
@@ -110,31 +112,31 @@ function createDownBtn(ele){
           for (var i in handleList.SONG_LIST) {
             //console.log(SONG_LIST[i].songid);
             if (handleList.SONG_LIST[i].songid == id) {
-              prevvote = localStorage.getItem(id);
-              if(prevvote==null){
+              var prevvote = votes[id];
+              if(prevvote==undefined){
                 // Update as normal
                 handleList.SONG_LIST[i].votecount += delta;
-                localStorage.setItem(id, delta);
+                votes[id] = delta;
               }
               else if(prevvote==1 && delta==-1){
                 // Downvote 2
                 handleList.SONG_LIST[i].votecount += 2*delta;
-                localStorage.setItem(id, delta);
+                votes[id] = delta;
               }
               else if(prevvote==-1 && delta==1){
                 // Upvote 2
                 handleList.SONG_LIST[i].votecount += 2*delta;
-                localStorage.setItem(id, delta);
+                votes[id] = delta;
               }
               else if(prevvote==1 && delta==1){
                 // Downvote 1
                 handleList.SONG_LIST[i].votecount -= delta;
-                localStorage.removeItem(id);
+                votes[id] = undefined;
               }
               else if(prevvote==-1 && delta==-1){
                 // Upvote 1
                 handleList.SONG_LIST[i].votecount -= delta;
-                localStorage.removeItem(id);
+                votes[id] = undefined;
               }
               else{
                 // Do nothing.
