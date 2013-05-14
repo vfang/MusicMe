@@ -17,103 +17,40 @@
   <script type="text/javascript" src="{% static "playlist/js/vendor/jquery.js" %}"></script>
   <script type="text/javascript" src="{% static "playlist/js/musicme.js" %}"></script>
   
+  <script src="http://toma.hk/api.js?v=1"></script>
+
   <script type="text/javascript">
 
     $(document).ready(function(){
 
-      var SONG_LIST = [];
-      var UPVOTE_DELAY = 20000;
-
-      // check if a dictionary is empty
-      function isEmpty(dict) {
-        for (var prop in dict) {
-          if (dict.hasOwnProperty(prop)) {
-            return false;
-          }
-          }
-          return true;
-      }
-
-      // dictionary with key=songid, value=votecount
-      var CACHED_VOTES = {}
-      // refresh every minute
-      var REFRESH_INTERVAL = 10000
-
-      console.log("running");
+    //var SONG_LIST_temp = [];
+      console.log("ready")
       {% if song_list %}
         {% autoescape off %}
-          SONG_LIST = {{song_list}};
-          showList(SONG_LIST);
+          handleList.SONG_LIST = {{song_list}};
+          handleList.showList(handleList.SONG_LIST);
           // console.log(SONG_LIST);
         {% endautoescape %}
       {% else %}
         console.log("Error: could not load song list.");
       {% endif %}
+      //handleList(SONG_LIST);
+      console.log("OK")
 
-      // timer to flush cache and refresh
-      /*setInterval(function(){
-        if (isEmpty(CACHED_VOTES) == false) {
-          {% load update_cache %}
-          //song_list = {{ CACHED_VOTES|update_votes }};
+      $(".samll, button").click(function(){
+        // console.log("we are here");
+        // console.log($(this).attr("id"));
+        for (var i in handleList.SONG_LIST) {
+          if ($(this).attr("id") == "play_"+handleList.SONG_LIST[i].songid)
+          {
+            var a=musicPlayer.createTrackObject(handleList.SONG_LIST[i]);
+            $("#playlist_video_area").empty().append(a.render());
+            a.play();
+          }
         }
-        CACHED_VOTES = {};
-        {% autoescape off %}
-          showList({{ song_list }});
-        {% endautoescape %}
-      },REFRESH_INTERVAL);
-    */
-    function showList(list) {
-      var html = "";
-      list.sort(function(a,b) {
-        if (a.votecount > b.votecount)
-          return -1;
-        if (a.votecount < b.votecount)
-          return 1;
-        return 0;
       });
-      for(var i in list) {
-        html += createPlaylistElement(list[i]);
-        //console.log(html);
-      }
-
-      function changeVote(delta,id) {
-        // for now, just update the vote count from the cache entirely on the front end
-          for (var i in SONG_LIST) {
-            //console.log(SONG_LIST[i].songid);
-            if (SONG_LIST[i].songid == id) {
-              SONG_LIST[i].votecount += delta;
-              if (delta > 0) SONG_LIST[i].upbtndisable = "disable";
-              else SONG_LIST[i].downbtndisable = "disable";
-            }
-          }
-          clearList();
-          showList(SONG_LIST);
-          //loop through the list to see which song has been down voted and up voted, and disable that btn
-          for (var i in SONG_LIST) {
-            if (SONG_LIST[i].upbtndisable == "disable") {
-                document.getElementById('up_'+SONG_LIST[i].songid).disabled = true;
-            }
-            if(SONG_LIST[i].downbtndisable == "disable"){
-                document.getElementById('down_'+SONG_LIST[i].songid).disabled = true;
-            } 
-          }
-      }
-
-      $('#playlist').append(html);
-      // event handler for click on upvote button
-          $('.upvotebutton').click(function() {
-            var prefix = "up_";
-            var id = $(this).attr('id').substring(prefix.length);
-            changeVote(1,id);
-          });
-          $('.downvotebutton').click(function() {
-            var prefix = "down_";
-            var id = $(this).attr('id').substring(prefix.length);
-            changeVote(-1,id);
-          })
-    }
-
   })
+
   </script>
 
 </head>
@@ -168,6 +105,7 @@
     <!-- Main Feed -->
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div id="playlistarea" class="large-6 columns end">
+      <div id="playlist_video_area"></div>
       <div class="row">
         <div class="large-8 columns">
           <input id="songsearch" type="text" placeholder="Add a song to your playlist" />
