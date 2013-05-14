@@ -1,7 +1,7 @@
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
-	return "<div class='upvotebuttonContainer'><button class='tiny button success radius upvotebutton' id=up_" + ele.songid + ">^</button></div>";
+	return "<div class='upvotebuttonContainer'><button class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>^</button></div>";
 }
 
 function createPlaylistElement(ele){
@@ -11,7 +11,7 @@ function createPlaylistElement(ele){
 }
 
 function createPlayBtn(ele) {
-	var html = "<div class='playbuttonContainer'><button class='small button' id=play_" + ele.songid + ">PLAY</button></div>";
+	var html = "<div class='playbuttonContainer'><button class='small button' id='play_" + ele.songid + "'>PLAY</button></div>";
 	return html;
 }
 
@@ -20,7 +20,7 @@ function clearList() {
 }
 
 function createDownBtn(ele){
-	return "<div class='downvotebuttonContainer'><button class='tiny button alert radius downvotebutton' id=down_" + ele.songid + ">v</button></div>";
+	return "<div class='downvotebuttonContainer'><button class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>v</button></div>";
 }
 
 (function( musicPlayer, $, undefined){
@@ -117,16 +117,42 @@ function createDownBtn(ele){
                 // Update as normal
                 handleList.SONG_LIST[i].votecount += delta;
                 votes[id] = delta;
+                if(delta==1){
+                  // Make upv button green #5da423
+                  console.log(id);
+                  console.log($('#up_'+id));
+                  $('#up_'+id).css("background-color", "#5da423");
+                }
+                if(delta==-1){
+                  // Make downv button red #c60f13
+                  $('#down_'+id).css("background-color", "#c60f13");
+                }
               }
               else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
                 // Downvote 2
                 handleList.SONG_LIST[i].votecount += 2*delta;
                 votes[id] = delta;
+
+                if(prevvote==1 && delta==-1){
+                  //Make upv button gray, downv button red
+                  $('#down_'+id).css("background-color", "#c60f13");
+                  $('#up_'+id).css("background-color", "gray");
+
+                }
+                if(prevvote==-1 && delta==1){
+                  //Make downv button gray, upv button greed
+                  $('#up_'+id).css("background-color", "#5da423");
+                  $('#down_'+id).css("background-color", "gray");
+                }
               }
               else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
                 // Undo vote, revert to original value
                 handleList.SONG_LIST[i].votecount -= delta;
                 votes[id] = undefined;
+
+                // Make both buttons gray
+                $('#up_'+id).css("background-color", "gray")
+                $('#down_'+id).css("background-color", "gray")
               }
               else{
                 // Do nothing.
