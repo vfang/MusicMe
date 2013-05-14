@@ -104,7 +104,6 @@ function createDownBtn(ele){
       });
       for(var i in list) {
         html += createPlaylistElement(list[i]);
-        //console.log(html);
       }
 
       function changeVote(delta,id) {
@@ -117,21 +116,51 @@ function createDownBtn(ele){
                 // Update as normal
                 handleList.SONG_LIST[i].votecount += delta;
                 votes[id] = delta;
-                if(delta==1){
-                  // Make upv button green #5da423
-                  console.log(id);
-                  console.log($('#up_'+id));
-                  $('#up_'+id).css("background-color", "#5da423");
-                }
-                if(delta==-1){
-                  // Make downv button red #c60f13
-                  $('#down_'+id).css("background-color", "#c60f13");
-                }
               }
               else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
                 // Downvote 2
                 handleList.SONG_LIST[i].votecount += 2*delta;
                 votes[id] = delta;
+              }
+              else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
+                // Undo vote, revert to original value
+                handleList.SONG_LIST[i].votecount -= delta;
+                votes[id] = undefined;
+              }
+              else{
+                // Do nothing.
+              }
+
+              // handleList.SONG_LIST[i].votecount += delta;
+              // if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
+              // else handleList.SONG_LIST[i].downbtndisable = "disable";
+            }
+          }
+          clearList();          
+          handleList.showList(handleList.SONG_LIST);
+          //loop through the list to see which song has been down voted and up voted, and disable that btn
+          for (var i in handleList.SONG_LIST) {
+            if (handleList.SONG_LIST[i].upbtndisable == "disable") {
+                document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
+            }
+            if(handleList.SONG_LIST[i].downbtndisable == "disable"){
+                document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
+            } 
+          }
+
+          //Change colors of buttons according to up/down
+          if(prevvote==undefined){                
+                if(delta==1){
+                  // Make upv button green #5da423
+                  $('#up_'+id).css("background-color", "#5da423");                
+                }
+                if(delta==-1){
+                  // Make downv button red #c60f13
+                  $('#down_'+id).css("background-color", "#c60f13");                  
+                }
+              }
+              else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
+                // Downvote 2
 
                 if(prevvote==1 && delta==-1){
                   //Make upv button gray, downv button red
@@ -147,8 +176,6 @@ function createDownBtn(ele){
               }
               else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
                 // Undo vote, revert to original value
-                handleList.SONG_LIST[i].votecount -= delta;
-                votes[id] = undefined;
 
                 // Make both buttons gray
                 $('#up_'+id).css("background-color", "gray")
@@ -157,24 +184,6 @@ function createDownBtn(ele){
               else{
                 // Do nothing.
               }
-
-
-              // handleList.SONG_LIST[i].votecount += delta;
-              // if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
-              // else handleList.SONG_LIST[i].downbtndisable = "disable";
-            }
-          }
-          clearList();
-          handleList.showList(handleList.SONG_LIST);
-          //loop through the list to see which song has been down voted and up voted, and disable that btn
-          for (var i in handleList.SONG_LIST) {
-            if (handleList.SONG_LIST[i].upbtndisable == "disable") {
-                document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
-            }
-            if(handleList.SONG_LIST[i].downbtndisable == "disable"){
-                document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
-            } 
-          }
       }
 
       $('#playlist').append(html);
