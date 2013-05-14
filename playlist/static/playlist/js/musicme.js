@@ -5,14 +5,14 @@ function createUpvoteBtn(ele) {
 }
 
 function createPlaylistElement(ele){
-	var html = "<div class='panel songpanel'>" + createPlayBtn(ele) + ele.songtitle + " - " + ele.artist + " " + "<b>" + ele.votecount + " votes</b>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "</div>";
+	var html = "<div class='panel songpanel'>" + createPlayBtn(ele) + createUpvoteBtn(ele)+ createDownBtn(ele) + ele.songtitle + " - " + ele.artist + " " + "<b>" + ele.votecount + " votes</b>" + "</div>";
 	
 	return html; 
 }
 
 function createPlayBtn(ele) {
 	var html = "<div class='playbuttonContainer'><button class='small button' id=play_" + ele.songid + ">PLAY</button></div>";
-	return html
+	return html;
 }
 
 function clearList() {
@@ -34,16 +34,16 @@ function createDownBtn(ele){
     		],
     		handlers: {
 		        onloaded: function() {
-		            console.log(track.connection+":\n  api loaded");
+		            // console.log(track.connection+":\n  api loaded");
 		        },
 		        onended: function() {
-		            console.log(track.connection+":\n  Song ended: "+track.artist+" - "+track.title);
+		        //     console.log(track.connection+":\n  Song ended: "+track.artist+" - "+track.title);
 		        },
 		        onplayable: function() {
-		            console.log(track.connection+":\n  playable");
+		            // console.log(track.connection+":\n  playable");
 		        },
 		        onresolved: function(resolver, result) {
-		            console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
+		            // console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
 		        },
 		        ontimeupdate: function(timeupdate) {
 		            var currentTime = timeupdate.currentTime;
@@ -51,7 +51,7 @@ function createDownBtn(ele){
 		            currentTime = parseInt(currentTime);
 		            duration = parseInt(duration);
 
-		            console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
+		            // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
 		        }
     		}
 		});
@@ -118,23 +118,13 @@ function createDownBtn(ele){
                 handleList.SONG_LIST[i].votecount += delta;
                 votes[id] = delta;
               }
-              else if(prevvote==1 && delta==-1){
+              else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
                 // Downvote 2
                 handleList.SONG_LIST[i].votecount += 2*delta;
                 votes[id] = delta;
               }
-              else if(prevvote==-1 && delta==1){
-                // Upvote 2
-                handleList.SONG_LIST[i].votecount += 2*delta;
-                votes[id] = delta;
-              }
-              else if(prevvote==1 && delta==1){
-                // Downvote 1
-                handleList.SONG_LIST[i].votecount -= delta;
-                votes[id] = undefined;
-              }
-              else if(prevvote==-1 && delta==-1){
-                // Upvote 1
+              else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
+                // Undo vote, revert to original value
                 handleList.SONG_LIST[i].votecount -= delta;
                 votes[id] = undefined;
               }
