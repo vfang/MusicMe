@@ -24,7 +24,7 @@
     $(document).ready(function(){
 
     //var SONG_LIST_temp = [];
-    
+      console.log("ready")
       {% if song_list %}
         {% autoescape off %}
           handleList.SONG_LIST = {{song_list}};
@@ -35,6 +35,18 @@
         console.log("Error: could not load song list.");
       {% endif %}
       //handleList(SONG_LIST);
+      console.log("OK")
+      var TRACKS = []
+      for (var i in handleList.SONG_LIST) {
+          var curSongEle = handleList.SONG_LIST[i];
+          console.log(i)
+          console.log(curSongEle)
+          $("#play_"+curSongEle.songid).click(function() {
+              TRACKS.push(musicPlayer.createTrackObject(curSongEle))
+              $("#playlist_video_area").empty().append(TRACKS[i].render());
+              TRACKS[i].play();
+          })
+      }
 
   })
   </script>
@@ -91,6 +103,7 @@
     <!-- Main Feed -->
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div id="playlistarea" class="large-6 columns end">
+      <div id="playlist_video_area"></div>
       <div class="row">
         <div class="large-8 columns">
           <input id="songsearch" type="text" placeholder="Add a song to your playlist" />

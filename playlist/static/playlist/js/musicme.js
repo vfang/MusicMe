@@ -3,9 +3,14 @@ function createUpvoteBtn(ele) {
 }
 
 function createPlaylistElement(ele){
-	var html = "<div class='panel'>" + ele.songtitle + " - " + ele.artist + " " + "<b>" + ele.votecount + " votes</b>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "</div>";
+	var html = "<div class='panel songpanel'>" + createPlayBtn(ele) + ele.songtitle + " - " + ele.artist + " " + "<b>" + ele.votecount + " votes</b>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "</div>";
 	
 	return html; 
+}
+
+function createPlayBtn(ele) {
+	var html = "<div class='playbuttonContainer'><button class='small button' id=play_" + ele.songid + ">PLAY</button></div>";
+	return html
 }
 
 function clearList() {
@@ -16,6 +21,41 @@ function createDownBtn(ele){
 	return "<div class='downvotebuttonContainer'><button class='tiny button alert radius downvotebutton' id=down_" + ele.songid + ">v</button></div>";
 }
 
+(function( musicPlayer, $, undefined){
+	musicPlayer.createTrackObject = function(track_ele) {
+		var track = window.tomahkAPI.Track(track_ele.songtitle,track_ele.artist, {
+    		width:300,
+    		height:300,
+    		disabledResolvers: [
+    			"tomahawk"
+        		// options: "SoundCloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
+    		],
+    		handlers: {
+		        onloaded: function() {
+		            console.log(track.connection+":\n  api loaded");
+		        },
+		        onended: function() {
+		            console.log(track.connection+":\n  Song ended: "+track.artist+" - "+track.title);
+		        },
+		        onplayable: function() {
+		            console.log(track.connection+":\n  playable");
+		        },
+		        onresolved: function(resolver, result) {
+		            console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
+		        },
+		        ontimeupdate: function(timeupdate) {
+		            var currentTime = timeupdate.currentTime;
+		            var duration = timeupdate.duration;
+		            currentTime = parseInt(currentTime);
+		            duration = parseInt(duration);
+
+		            console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
+		        }
+    		}
+		});
+		return track
+	}
+}( window.musicPlayer = window.musicPlayer || {}, jQuery ));
 
 /* Proper coding practice: http://enterprisejquery.com/2010/10/how-good-c-habits-can-encourage-bad-javascript-habits-part-1/ */
 //Self-Executing Anonymous Func: Part 2 (Public & Private)
