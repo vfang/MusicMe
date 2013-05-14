@@ -36,19 +36,21 @@
       {% endif %}
       //handleList(SONG_LIST);
       console.log("OK")
-      var TRACKS = []
-      for (var i in handleList.SONG_LIST) {
-          var curSongEle = handleList.SONG_LIST[i];
-          console.log(i)
-          console.log(curSongEle)
-          $("#play_"+curSongEle.songid).click(function() {
-              TRACKS.push(musicPlayer.createTrackObject(curSongEle))
-              $("#playlist_video_area").empty().append(TRACKS[i].render());
-              TRACKS[i].play();
-          })
-      }
 
+      $(".samll, button").click(function(){
+        // console.log("we are here");
+        // console.log($(this).attr("id"));
+        for (var i in handleList.SONG_LIST) {
+          if ($(this).attr("id") == "play_"+handleList.SONG_LIST[i].songid)
+          {
+            var a=musicPlayer.createTrackObject(handleList.SONG_LIST[i]);
+            $("#playlist_video_area").empty().append(a.render());
+            a.play();
+          }
+        }
+      });
   })
+
   </script>
 
 </head>
