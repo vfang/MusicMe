@@ -110,9 +110,40 @@ function createDownBtn(ele){
           for (var i in handleList.SONG_LIST) {
             //console.log(SONG_LIST[i].songid);
             if (handleList.SONG_LIST[i].songid == id) {
-              handleList.SONG_LIST[i].votecount += delta;
-              if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
-              else handleList.SONG_LIST[i].downbtndisable = "disable";
+              prevvote = localStorage.getItem(id);
+              if(prevvote==null){
+                // Update as normal
+                handleList.SONG_LIST[i].votecount += delta;
+                localStorage.setItem(id, delta);
+              }
+              else if(prevvote==1 && delta==-1){
+                // Downvote 2
+                handleList.SONG_LIST[i].votecount += 2*delta;
+                localStorage.setItem(id, delta);
+              }
+              else if(prevvote==-1 && delta==1){
+                // Upvote 2
+                handleList.SONG_LIST[i].votecount += 2*delta;
+                localStorage.setItem(id, delta);
+              }
+              else if(prevvote==1 && delta==1){
+                // Downvote 1
+                handleList.SONG_LIST[i].votecount -= delta;
+                localStorage.removeItem(id);
+              }
+              else if(prevvote==-1 && delta==-1){
+                // Upvote 1
+                handleList.SONG_LIST[i].votecount -= delta;
+                localStorage.removeItem(id);
+              }
+              else{
+                // Do nothing.
+              }
+
+
+              // handleList.SONG_LIST[i].votecount += delta;
+              // if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
+              // else handleList.SONG_LIST[i].downbtndisable = "disable";
             }
           }
           clearList();
@@ -142,3 +173,10 @@ function createDownBtn(ele){
           })
     };
 }( window.handleList = window.handleList || {}, jQuery ));
+
+
+
+
+
+
+
