@@ -7,7 +7,7 @@ from playlist.utils import *
 import json
 
 def index(request):
-
+	
 	# should get this from db, obviously
 	SONGS = [SongContainer("Mirrors","Justin Timberlake",10),
 			 SongContainer("Stay","Rihanna",20),
