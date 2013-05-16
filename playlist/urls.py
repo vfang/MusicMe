@@ -7,5 +7,5 @@ uniquecode = ''.join(random.choice(string.ascii_lowercase + string.digits + stri
 
 
 urlpatterns = patterns('',
-    url(r'^$', views.index, name='index')
+    url(r'^$', views.index, name='index'),    
 )

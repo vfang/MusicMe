@@ -27,10 +27,10 @@
     $(document).ready(function(){
 
     //var SONG_LIST_temp = [];
-      console.log("ready")
+      console.log("ready")      
       {% if song_list %}
         {% autoescape off %}
-          handleList.SONG_LIST = {{song_list}};
+          handleList.SONG_LIST = {{song_list}};          
           handleList.showList(handleList.SONG_LIST);
           // console.log(SONG_LIST);
         {% endautoescape %}
@@ -47,8 +47,12 @@
           if ($(this).attr("id") == "play_"+handleList.SONG_LIST[i].songid)
           {
             var a=musicPlayer.createTrackObject(handleList.SONG_LIST[i]);
+<<<<<<< HEAD
             
             //This will be where it goes in to the cover flow.
+=======
+            console.log('TITLE: ' + a.title);
+>>>>>>> cdeba4a5e6a2ad9aa72263ebeb7ceef0465069b0
             $("#playlist_video_area").empty().append(a.render());
             a.play();
           }
@@ -168,8 +172,6 @@
 
   <div class="row">
 
-
-
  <!-- Nav Sidebar -->
     <!-- This is source ordered to be pulled to the left on larger screens -->
     <!-- <div class="large-3 columns ">
@@ -215,7 +217,8 @@
           <a href="#" class="button small" css="float: left;">Submit</a>
         </div>
       </div>
-      <div id="playlist">
+      <div id="playlist">       
+    
       </div>
       
       
