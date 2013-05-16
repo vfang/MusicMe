@@ -30,13 +30,3 @@ def make_song_json_list(song_arr):
 	for song in song_arr:
 		json_arr.append(song.writeToJSON())
 	return json_arr
-
-## testing
-if __name__ == "__main__":
-	if DEBUG_PLAYLISTS_PY == True:
-		songlist = []
-		songlist.append(SongContainer("Call Me Maybe","Carly Rae Jepsen",-10))
-		songlist.append(SongContainer("The World Is Yours","Nas",20))
-		songlist.append(SongContainer("Help!","The Beatles",10))
-		songlist.append(SongContainer("The End","The Doors",100))
-		print make_song_json_list(songlist)

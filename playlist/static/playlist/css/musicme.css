@@ -14,3 +14,13 @@
 .songinfo {
 	float: left;
 }
+
+.upv {
+	background-color: gray;
+	border: green;
+}
+
+.downv {
+	background-color: gray;
+	border: red;
+}
