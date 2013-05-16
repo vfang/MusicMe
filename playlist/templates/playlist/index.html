@@ -24,10 +24,10 @@
     $(document).ready(function(){
 
     //var SONG_LIST_temp = [];
-      console.log("ready")
+      console.log("ready")      
       {% if song_list %}
         {% autoescape off %}
-          handleList.SONG_LIST = {{song_list}};
+          handleList.SONG_LIST = {{song_list}};          
           handleList.showList(handleList.SONG_LIST);
           // console.log(SONG_LIST);
         {% endautoescape %}
@@ -44,6 +44,7 @@
           if ($(this).attr("id") == "play_"+handleList.SONG_LIST[i].songid)
           {
             var a=musicPlayer.createTrackObject(handleList.SONG_LIST[i]);
+            console.log('TITLE: ' + a.title);
             $("#playlist_video_area").empty().append(a.render());
             a.play();
           }
@@ -69,8 +70,6 @@
 
 
   <div class="row">
-
-
 
  <!-- Nav Sidebar -->
     <!-- This is source ordered to be pulled to the left on larger screens -->
@@ -114,7 +113,8 @@
           <a href="#" class="button small" css="float: left;">Submit</a>
         </div>
       </div>
-      <div id="playlist">
+      <div id="playlist">       
+    
       </div>
       
       
