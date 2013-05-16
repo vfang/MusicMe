@@ -110,94 +110,125 @@ function createDownBtn(ele){
         // for now, just update the vote count from the cache entirely on the front end
           for (var i in handleList.SONG_LIST) {
             //console.log(SONG_LIST[i].songid);
-            if (handleList.SONG_LIST[i].songid == id) {
-              var prevvote = votes[id];
-              if(prevvote==undefined){
-                // Update as normal
+          //   if (handleList.SONG_LIST[i].songid == id) {
+          //     var prevvote = votes[id];
+          //     if(prevvote==undefined){
+          //       // Update as normal
+          //       handleList.SONG_LIST[i].votecount += delta;
+          //       votes[id] = delta;
+          //     }
+          //     else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
+          //       // Downvote 2
+          //       handleList.SONG_LIST[i].votecount += 2*delta;
+          //       votes[id] = delta;
+          //     }
+          //     else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
+          //       // Undo vote, revert to original value
+          //       handleList.SONG_LIST[i].votecount -= delta;
+          //       votes[id] = undefined;
+          //     }
+          //     else{
+          //       // Do nothing.
+          //     }
+
+          //     // handleList.SONG_LIST[i].votecount += delta;
+          //     // if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
+          //     // else handleList.SONG_LIST[i].downbtndisable = "disable";
+          //   }
+          // }
+          if (handleList.SONG_LIST[i].songid == id) {
+            if (delta > 0) {
+              if (handleList.SONG_LIST[i].upbtndisable == "enable"){
                 handleList.SONG_LIST[i].votecount += delta;
-                votes[id] = delta;
-              }
-              else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
-                // Downvote 2
-                handleList.SONG_LIST[i].votecount += 2*delta;
-                votes[id] = delta;
-              }
-              else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
-                // Undo vote, revert to original value
-                handleList.SONG_LIST[i].votecount -= delta;
-                votes[id] = undefined;
+                handleList.SONG_LIST[i].upbtndisable = "disable";
               }
               else{
-                // Do nothing.
+                handleList.SONG_LIST[i].votecount -= delta;
+                handleList.SONG_LIST[i].upbtndisable = "enable";
+              }
+            }
+            else {
+              if (handleList.SONG_LIST[i].downbtndisable == "enable"){
+                handleList.SONG_LIST[i].votecount += delta;
+                handleList.SONG_LIST[i].downbtndisable = "disable";
+              }
+              else{
+                handleList.SONG_LIST[i].votecount -= delta;
+                handleList.SONG_LIST[i].downbtndisable = "enable";
               }
 
-              // handleList.SONG_LIST[i].votecount += delta;
-              // if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
-              // else handleList.SONG_LIST[i].downbtndisable = "disable";
             }
           }
+        }
+
           clearList();          
           handleList.showList(handleList.SONG_LIST);
           //loop through the list to see which song has been down voted and up voted, and disable that btn
           for (var i in handleList.SONG_LIST) {
             if (handleList.SONG_LIST[i].upbtndisable == "disable") {
-                document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
+                document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
+                $('#up_'+handleList.SONG_LIST[i].songid).css("background-color", "#5da423");
             }
             if(handleList.SONG_LIST[i].downbtndisable == "disable"){
-                document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
+                document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
+                $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
             } 
           }
 
+        }
+
           //Change colors of buttons according to up/down
-          if(prevvote==undefined){                
-                if(delta==1){
-                  // Make upv button green #5da423
-                  $('#up_'+id).css("background-color", "#5da423");                
-                }
-                if(delta==-1){
-                  // Make downv button red #c60f13
-                  $('#down_'+id).css("background-color", "#c60f13");                  
-                }
-              }
-              else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
-                // Downvote 2
+          // if(prevvote==undefined){                
+          //       if(delta==1){
+          //         // Make upv button green #5da423
+          //         $('#up_'+id).css("background-color", "#5da423");                
+          //       }
+          //       if(delta==-1){
+          //         // Make downv button red #c60f13
+          //         $('#down_'+id).css("background-color", "#c60f13");                  
+          //       }
+              // }
+          //     else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
+          //       // Downvote 2
 
-                if(prevvote==1 && delta==-1){
-                  //Make upv button gray, downv button red
-                  $('#down_'+id).css("background-color", "#c60f13");
-                  $('#up_'+id).css("background-color", "gray");
+          //       if(prevvote==1 && delta==-1){
+          //         //Make upv button gray, downv button red
+          //         $('#down_'+id).css("background-color", "#c60f13");
+          //         $('#up_'+id).css("background-color", "gray");
 
-                }
-                if(prevvote==-1 && delta==1){
-                  //Make downv button gray, upv button greed
-                  $('#up_'+id).css("background-color", "#5da423");
-                  $('#down_'+id).css("background-color", "gray");
-                }
-              }
-              else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
-                // Undo vote, revert to original value
+          //       }
+          //       if(prevvote==-1 && delta==1){
+          //         //Make downv button gray, upv button greed
+          //         $('#up_'+id).css("background-color", "#5da423");
+          //         $('#down_'+id).css("background-color", "gray");
+          //       }
+          //     }
+          //     else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
+          //       // Undo vote, revert to original value
 
-                // Make both buttons gray
-                $('#up_'+id).css("background-color", "gray")
-                $('#down_'+id).css("background-color", "gray")
-              }
-              else{
-                // Do nothing.
-              }
-      }
+          //       // Make both buttons gray
+          //       $('#up_'+id).css("background-color", "gray")
+          //       $('#down_'+id).css("background-color", "gray")
+          //     }
+          //     else{
+          //       // Do nothing.
+              // }
+      // }
 
       $('#playlist').append(html);
       // event handler for click on upvote button
-          $('.upvotebutton').click(function() {
-            var prefix = "up_";
-            var id = $(this).attr('id').substring(prefix.length);
-            changeVote(1,id);
-          });
-          $('.downvotebutton').click(function() {
-            var prefix = "down_";
-            var id = $(this).attr('id').substring(prefix.length);
-            changeVote(-1,id);
-          })
+      $('.upvotebutton').click(function() {
+        var prefix = "up_";
+        var id = $(this).attr('id').substring(prefix.length);
+        changeVote(1,id);
+      });
+
+      $('.downvotebutton').click(function() {
+        var prefix = "down_";
+        var id = $(this).attr('id').substring(prefix.length);
+        changeVote(-1,id);
+      })
+
     };
 }( window.handleList = window.handleList || {}, jQuery ));
 
