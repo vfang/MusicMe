@@ -14,7 +14,7 @@ class Song(models.Model):
 	downcount = models.IntegerField(default=0)
 	upcount = models.IntegerField(default=0)
 
-	songid = models.CharField(max_length=200)
+	songid = models.CharField(max_length=1000)
 
 	upbtndisable = models.BooleanField(default=False)
 	downbtndisable = models.BooleanField(default=False)
@@ -46,6 +46,9 @@ class Song(models.Model):
 	def updateVoteCount(delta): 
 		self.votecount += delta
 		return
+
+	def __unicode__(self):
+		return u'%s - %s' % (self.title, self.artist)
 
 class Playlist(models.Model):
 	songs = models.ManyToManyField(Song)

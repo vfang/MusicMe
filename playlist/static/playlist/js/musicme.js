@@ -203,7 +203,20 @@ function createDownBtn(ele){
 
 
 
+  $(document).ready(function () {
+
+  $("#submit").click(function(e) {
+    // e.preventDefault();
+    
+    $.ajax({
+      url: "/add/",
+    }).done(function ( data ) {
+      if( console && console.log ) {
+        console.log("Sample of data:", data);
+      }
+    });
 
 
+  });
 
-
+});

@@ -107,10 +107,15 @@
       <div id="playlist_video_area"></div>
       <div class="row">
         <div class="large-8 columns">
-          <input id="songsearch" type="text" placeholder="Add a song to your playlist" />
+           <form action="/add/?playlist={{pid}}" method="post">
+            {% csrf_token %}
+          <input type="text" placeholder="Add a song to your playlist" id="songsearch" name="songsearch"/>
         </div>
         <div class="large-4 columns">
-          <a href="#" class="button small" css="float: left;">Submit</a>
+          <!-- <a href="#" class="button small" css="float: left;">Submit</a> -->
+
+           <input type="submit" value="Submit" class="button small"/>
+         </form>
         </div>
       </div>
       <div id="playlist">       
