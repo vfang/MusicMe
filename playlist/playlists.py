@@ -3,7 +3,7 @@
 DEBUG_PLAYLISTS_PY = False
 
 # ## Container object for a song
-# class SongContainer:
+# class Song:
 # 	def __init__(self,title,artist,votecount=0):
 # 		self.title = title
 # 		self.artist = artist
@@ -21,10 +21,10 @@ DEBUG_PLAYLISTS_PY = False
 # 		return
 
 
-## take as input an unordered array of SongContainer objects, and return a list of JSON song objects sorted by descending upvote count
+## take as input an unordered array of Song objects, and return a list of JSON song objects sorted by descending upvote count
 def make_song_json_list(song_arr):
 	# sort so the highest vote count is first
-	song_arr.sort(key=lambda songcontainer: -songcontainer.votecount)
+	song_arr.sort(key=lambda Song: -Song.votecount)
 	# do things here
 	json_arr = []
 	for song in song_arr:
