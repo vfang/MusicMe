@@ -71,8 +71,21 @@ function createDownBtn(ele){
             //console.log(SONG_LIST[i].songid);
             if (handleList.SONG_LIST[i].songid == id) {
               handleList.SONG_LIST[i].votecount += delta;
-              if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
-              else handleList.SONG_LIST[i].downbtndisable = "disable";
+              if (delta > 0) {
+                if (handleList.SONG_LIST[i].downbtndisable == "disable")
+                  handleList.SONG_LIST[i].votecount += delta;
+                
+                handleList.SONG_LIST[i].upbtndisable = "disable";
+                handleList.SONG_LIST[i].downbtndisable = "enable" ;
+              }
+              else {
+                if (handleList.SONG_LIST[i].upbtndisable == "disable")
+                  handleList.SONG_LIST[i].votecount += delta;
+
+                handleList.SONG_LIST[i].upbtndisable = "enable";
+                handleList.SONG_LIST[i].downbtndisable = "disable";
+
+              }
             }
           }
           clearList();
