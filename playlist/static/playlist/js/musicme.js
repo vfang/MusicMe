@@ -236,15 +236,18 @@ function createDownBtn(ele){
 
   $(document).ready(function () {
 
-  $("#submit").click(function(e) {
+  $("#addSong").submit(function() {
     // e.preventDefault();
-    
+    // console.log('hello')
+
     $.ajax({
-      url: "/add/",
+      url: $(this).action('action'),
+      type: $(this).attr('method'),
+      data: $(this).serialize(),
     }).done(function ( data ) {
-      if( console && console.log ) {
-        console.log("Sample of data:", data);
-      }
+      // if( console && console.log ) {
+      //   console.log("Sample of data:", data);
+      // }
     });
 
 

@@ -51,15 +51,6 @@ def add(request):
 
 		print 'TRACK: ',songTitle, ' by ', songArtist
 
-		# p, created = Person.objects.get_or_create(first_name='John', last_name='Lennon', defaults={'birthday': date(1940, 10, 9)})
-		# try:
-		# 	print 'trying'
-		# 	song = Song.objects.get(title=songTitle, artist=songArtist)
-		# 	print song
-		# except Song.DoesNotExist:
-		# 	song = Song(title = songTitle, artist = 'songArtist', votecount=0, albumTite='n/a', albumArtUrl='n/a', songid=hashlib.sha256((title+artist).encode('utf-8')).hexdigest())
-		# 	song.save()
-		# 	print 'saved'
 		key=hashlib.sha256((songTitle+songArtist).encode('utf-8')).hexdigest()
 		song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key)
 		if created:
@@ -76,4 +67,5 @@ def add(request):
 	context = Context()
 	template = loader.get_template('playlist/index.html')
 
-	return render_to_response('playlist/index.html', context, context_instance=RequestContext(request))	
+	# return render_to_response('/?playlist=' + pid, context, context_instance=RequestContext(request))	
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/?playlist=' + pid))
