@@ -21,6 +21,29 @@ def index(request):
 
 		return render_to_response('playlist/index.html', context, context_instance=RequestContext(request))
 
+	if request.method == "POST":
+		try:
+			songInfo = request.POST['songsearch']
+			print songInfo, pid
+
+			songInfo = re.split(', ', songInfo)
+			songTitle = songInfo[0]
+			songArtist = songInfo[1]
+
+			key=hashlib.sha256((songTitle+songArtist).encode('utf-8')).hexdigest()
+			song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key)
+			if created:
+				
+				song.save()
+				print 'TRACK: ',songTitle, ' by ', songArtist, ' saved'	
+				playlist = Playlist.objects.get(id = pid)
+				playlist.songs.add(song.id)
+			else:
+				print 'TRACK: ',songTitle, ' by ', songArtist, ' already exists'
+			return HttpResponse(json.dumps({'message': 'success'}))
+		except:
+			print "failed to post request"
+
 	playlist = get_object_or_404(Playlist, pk=pid)
 	SONGS = []
 
@@ -34,38 +57,4 @@ def index(request):
 	template = loader.get_template('playlist/index.html')
 
 	return render_to_response('playlist/index.html', context, context_instance=RequestContext(request))
-	# return HttpResponse(template.render(context),context_instance=RequestContext(request))
 
-def add(request):
-	pid = request.GET.get('playlist')
-	print pid
-
-	try:
-		songInfo = request.POST['songsearch']
-		print songInfo
-		# print playlisturl
-
-		songInfo = re.split(', ', songInfo)
-		songTitle = songInfo[0]
-		songArtist = songInfo[1]
-
-		print 'TRACK: ',songTitle, ' by ', songArtist
-
-		key=hashlib.sha256((songTitle+songArtist).encode('utf-8')).hexdigest()
-		song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key)
-		if created:
-			print 'saved'
-			song.save()
-			playlist = Playlist.objects.get(id = pid)
-			playlist.songs.add(song.id)
-		else:
-			
-			print 'TRACK: ',songTitle, ' by ', songArtist, ' already exists'
-			
-	except:
-		return HttpResponseRedirect("../")
-	context = Context()
-	template = loader.get_template('playlist/index.html')
-
-	# return render_to_response('/?playlist=' + pid, context, context_instance=RequestContext(request))	
-	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/?playlist=' + pid))

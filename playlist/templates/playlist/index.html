@@ -101,26 +101,30 @@
       </div>
     </div> -->
 
-    <!-- Main Feed -->
+   <!-- Main Feed -->
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div id="playlistarea" class="large-6 columns end">
       <div id="playlist_video_area"></div>
       <div class="row">
         <div class="large-8 columns">
-           <form action="/add/?playlist={{pid}}" method="post">
+          <!--  <form action="/add/?playlist={{pid}}" method="post"> -->
+           <form action="" method="post" id="addSong">
             {% csrf_token %}
           <input type="text" placeholder="Add a song to your playlist" id="songsearch" name="songsearch"/>
+          <input type="hidden" id="pid" name="pid" />
         </div>
         <div class="large-4 columns">
           <!-- <a href="#" class="button small" css="float: left;">Submit</a> -->
 
            <input type="submit" value="Submit" class="button small"/>
          </form>
+          <div class="message"></div>
         </div>
       </div>
       <div id="playlist">       
     
       </div>
+      
       
       
       
