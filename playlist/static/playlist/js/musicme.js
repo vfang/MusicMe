@@ -39,6 +39,9 @@ function createDownBtn(ele){
 		        onended: function() {
 		        //     console.log(track.connection+":\n  Song ended: "+track.artist+" - "+track.title);
 		        },
+            onplay: function() {
+                //console.log('MOOOOO ::: ' + track.artist);
+            },
 		        onplayable: function() {
 		            // console.log(track.connection+":\n  playable");
 		        },
@@ -111,7 +114,6 @@ function createDownBtn(ele){
           for (var i in handleList.SONG_LIST) {
             //console.log(SONG_LIST[i].songid);
             if (handleList.SONG_LIST[i].songid == id) {
-<<<<<<< HEAD
               handleList.SONG_LIST[i].votecount += delta;
               if (delta > 0) {
                 if (handleList.SONG_LIST[i].downbtndisable == "disable")
@@ -128,7 +130,6 @@ function createDownBtn(ele){
                 handleList.SONG_LIST[i].downbtndisable = "disable";
 
               }
-=======
               var prevvote = votes[id];
               if(prevvote==undefined){
                 // Update as normal
@@ -152,7 +153,6 @@ function createDownBtn(ele){
               // handleList.SONG_LIST[i].votecount += delta;
               // if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
               // else handleList.SONG_LIST[i].downbtndisable = "disable";
->>>>>>> 9a4547d86c9ae74c083cc6a02aa22c83d8d6d811
             }
           }
           clearList();          
@@ -188,7 +188,7 @@ function createDownBtn(ele){
 
                 }
                 if(prevvote==-1 && delta==1){
-                  //Make downv button gray, upv button greed
+                  //Make downv button gray, upv button green
                   $('#up_'+id).css("background-color", "#5da423");
                   $('#down_'+id).css("background-color", "gray");
                 }
