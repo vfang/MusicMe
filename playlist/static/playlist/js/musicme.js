@@ -187,6 +187,25 @@ function createDownBtn(ele){
 }( window.handleList = window.handleList || {}, jQuery ));
 
 
+<<<<<<< HEAD
 
 
 
+=======
+$(document).ready(function() {
+    $('#addSong').submit(function() { 
+        $.ajax({ 
+            data: $(this).serialize(), 
+            type: $(this).attr('method'), 
+            url: $(this).attr('action'), 
+            success: function(response) { 
+                $('#message').html(response); 
+            },
+            error: function(e, x, r) { 
+                $('#error_div').html(e); 
+            }
+        });
+        return false;
+    });
+});
+>>>>>>> eed5cf21db8b36f2fe1b47f1dd0d177246d4fed6

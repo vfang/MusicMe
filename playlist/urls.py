@@ -8,6 +8,6 @@ uniquecode = ''.join(random.choice(string.ascii_lowercase + string.digits + stri
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),   
-    url(r'^add/$', views.add, name='addSong'),
+    # url(r'^add/$', views.add, name='addSong'),
 
 )
