@@ -1,3 +1,18 @@
+function bindShit() {
+ $(".playButton").click(function() {
+    console.log($(this).attr("id"));
+    for (var i in handleList.SONG_LIST) {
+      if ($(this).attr("id") == "play_"+handleList.SONG_LIST[i].songid)
+      {
+        var a=musicPlayer.createTrackObject(handleList.SONG_LIST[i]);
+        console.log('TITLE: ' + a.title);
+        $("#playlist_video_area").empty().append(a.render());
+        a.play();
+      }
+    }
+  }); 
+}
+
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
@@ -11,7 +26,7 @@ function createPlaylistElement(ele){
 }
 
 function createPlayBtn(ele) {
-	var html = "<div class='playbuttonContainer'><button class='small button' id='play_" + ele.songid + "'>PLAY</button></div>";
+	var html = "<div class='playbuttonContainer'><button class='small button playButton' id='play_" + ele.songid + "'>PLAY</button></div>";
 	return html;
 }
 
@@ -28,9 +43,11 @@ function createDownBtn(ele){
 		var track = window.tomahkAPI.Track(track_ele.songtitle,track_ele.artist, {
     		width:300,
     		height:300,
+        autoplay:1,
     		disabledResolvers: [
-    			"tomahawk"
-        		// options: "SoundCloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
+    			"Youtube", "Spotify"
+        	
+            // options: "SoundCloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
     		],
     		handlers: {
 		        onloaded: function() {
@@ -109,33 +126,7 @@ function createDownBtn(ele){
       function changeVote(delta,id) {
         // for now, just update the vote count from the cache entirely on the front end
           for (var i in handleList.SONG_LIST) {
-            //console.log(SONG_LIST[i].songid);
-          //   if (handleList.SONG_LIST[i].songid == id) {
-          //     var prevvote = votes[id];
-          //     if(prevvote==undefined){
-          //       // Update as normal
-          //       handleList.SONG_LIST[i].votecount += delta;
-          //       votes[id] = delta;
-          //     }
-          //     else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
-          //       // Downvote 2
-          //       handleList.SONG_LIST[i].votecount += 2*delta;
-          //       votes[id] = delta;
-          //     }
-          //     else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
-          //       // Undo vote, revert to original value
-          //       handleList.SONG_LIST[i].votecount -= delta;
-          //       votes[id] = undefined;
-          //     }
-          //     else{
-          //       // Do nothing.
-          //     }
 
-          //     // handleList.SONG_LIST[i].votecount += delta;
-          //     // if (delta > 0) handleList.SONG_LIST[i].upbtndisable = "disable";
-          //     // else handleList.SONG_LIST[i].downbtndisable = "disable";
-          //   }
-          // }
           if (handleList.SONG_LIST[i].songid == id) {
             if (delta > 0) {
               if (handleList.SONG_LIST[i].upbtndisable == "False"){
@@ -174,46 +165,9 @@ function createDownBtn(ele){
                 $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
             } 
           }
-
+        bindShit();
         }
 
-          //Change colors of buttons according to up/down
-          // if(prevvote==undefined){                
-          //       if(delta==1){
-          //         // Make upv button green #5da423
-          //         $('#up_'+id).css("background-color", "#5da423");                
-          //       }
-          //       if(delta==-1){
-          //         // Make downv button red #c60f13
-          //         $('#down_'+id).css("background-color", "#c60f13");                  
-          //       }
-              // }
-          //     else if((prevvote==1 && delta==-1) || (prevvote==-1 && delta==1)){
-          //       // Downvote 2
-
-          //       if(prevvote==1 && delta==-1){
-          //         //Make upv button gray, downv button red
-          //         $('#down_'+id).css("background-color", "#c60f13");
-          //         $('#up_'+id).css("background-color", "gray");
-
-          //       }
-          //       if(prevvote==-1 && delta==1){
-          //         //Make downv button gray, upv button greed
-          //         $('#up_'+id).css("background-color", "#5da423");
-          //         $('#down_'+id).css("background-color", "gray");
-          //       }
-          //     }
-          //     else if((prevvote==1 && delta==1) || (prevvote==-1 && delta==-1)){
-          //       // Undo vote, revert to original value
-
-          //       // Make both buttons gray
-          //       $('#up_'+id).css("background-color", "gray")
-          //       $('#down_'+id).css("background-color", "gray")
-          //     }
-          //     else{
-          //       // Do nothing.
-              // }
-      // }
 
       $('#playlist').append(html);
       // event handler for click on upvote button
@@ -234,23 +188,5 @@ function createDownBtn(ele){
 
 
 
-  $(document).ready(function () {
-
-  $("#addSong").submit(function() {
-    // e.preventDefault();
-    // console.log('hello')
-
-    $.ajax({
-      url: $(this).action('action'),
-      type: $(this).attr('method'),
-      data: $(this).serialize(),
-    }).done(function ( data ) {
-      // if( console && console.log ) {
-      //   console.log("Sample of data:", data);
-      // }
-    });
 
 
-  });
-
-});
