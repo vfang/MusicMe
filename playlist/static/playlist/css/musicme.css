@@ -2,15 +2,6 @@
 	float: left;
 }
 
-.upvotebuttonContainer {
-	float: right;
-	margin-left: 5px;
-}
-
-.downvotebuttonContainer {
-	float: right;
-}
-
 .songinfo {
 	float: left;
 }
@@ -27,14 +18,47 @@
 
 .songpanel{
 	padding: .75em;
+	position:	relative;
 }
 
 #playPlaylistBtn {
 	width:100%;
 	display: block;
+	top: -13px;
 }
 
 #pausePlaylistBtn {
 	width:100%;
 	display: none;
+	top: -13px; 
+}
+
+#songInf {
+	width: 70%;
+	overflow: hidden;
+}
+
+#voteContainer{
+	position: absolute;
+	width: 80px;
+	right: 10px;
+	top: 9px;
+	text-align: center;
+}
+
+#voteContainer #votes{
+	font-size: 1em;
+	padding-top: 4px;
+	color: black;
+	font-weight: bold;
+
+
+}
+
+#voteContainer .upvotebuttonContainer {
+	float: right;
+}
+
+#voteContainer .downvotebuttonContainer {
+	float: left;
 }
