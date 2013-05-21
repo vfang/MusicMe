@@ -114,7 +114,9 @@
     <div id="playlistarea" class="large-6 large-offset-3 columns end">
       <div id="playlist_video_area"></div>
       <div class="row">
+
         <div class="large-8 columns" style="width: 74%;">
+
           <!--  <form action="/add/?playlist={{pid}}" method="post"> -->
            <form action="" method="post" id="addSong">
             {% csrf_token %}
@@ -130,7 +132,7 @@
       </div>
 
       <div>
-        <button id="playPlaylistBtn" class="success">Play All</button>
+        <button id="playPlaylistBtn" class="success" style="font-size: 1.25em;">Play All</button>
         <button id="pausePlaylistBtn" class="alert">Pause</button>
 
 
