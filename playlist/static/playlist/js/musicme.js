@@ -20,15 +20,15 @@ function createUpvoteBtn(ele) {
 }
 
 function createPlaylistElement(ele){
-	var html = "<div class='panel songpanel'>" + createPlayBtn(ele) + createUpvoteBtn(ele)+ createDownBtn(ele) + ele.songtitle + " - " + ele.artist + " " + "<b>" + ele.votecount + " </b>" + "</div>";
+	var html = "<div class='panel songpanel'>" /*+ createPlayBtn(ele)*/ + ele.songtitle + " - " + ele.artist + "<div id='voteContainer'>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "<b id='votes'>" + ele.votecount + " </b>" + "</div>" + "</div>";
 	
 	return html; 
 }
 
-function createPlayBtn(ele) {
-	var html = "<button class='small button playButton' id='play_" + ele.songid + "'>PLAY</button>";
-	return html;
-}
+//function createPlayBtn(ele) {
+//	var html = "<button class='small button playButton' id='play_" + ele.songid + "'>PLAY</button>";
+//	return html;
+//}
 
 function clearList() {
 	$('#playlist').empty();
