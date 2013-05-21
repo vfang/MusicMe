@@ -1,18 +1,3 @@
-function bindShit() {
- $(".playButton").click(function() {
-    console.log($(this).attr("id"));
-    for (var i in handleList.SONG_LIST) {
-      if ($(this).attr("id") == "play_"+handleList.SONG_LIST[i].songid)
-      {
-        var a=musicPlayer.createTrackObject(handleList.SONG_LIST[i]);
-        console.log('TITLE: ' + a.title);
-        $("#playlist_video_area").empty().append(a.render());
-        a.play();
-      }
-    }
-  }); 
-}
-
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
@@ -39,6 +24,14 @@ function createDownBtn(ele){
 }
 
 (function( musicPlayer, $, undefined){
+
+  musicPlayer.curTrackObject = null;
+  musicPlayer.curTrackIndex = 0;
+  musicPlayer.curTrackPosn = 0;
+
+  musicPlayer.setStarted = false;
+  musicPlayer.setPaused = false;
+
 	musicPlayer.createTrackObject = function(track_ele) {
 		var track = window.tomahkAPI.Track(track_ele.songtitle,track_ele.artist, {
     		width:300,
@@ -69,7 +62,24 @@ function createDownBtn(ele){
 		            duration = parseInt(duration);
 
 		            // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
-		        }
+		        },
+            onended: function() {
+              musicPlayer.curTrackIndex += 1;
+              if ((musicPlayer.curTrackIndex < handleList.SONG_LIST.length) && (musicPlayer.curTrackIndex > 0)) {
+                console.log("playing next");
+              } else {
+                musicPlayer.curTrackIndex = 0;
+              }
+              musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+              $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
+            },
+            onpause: function() {
+              // only allow pausing via pause all button
+              console.log(musicPlayer);
+              if (musicPlayer.setPaused == false) {
+                musicPlayer.curTrackObject.play();
+              }
+            }
     		}
 		});
 		return track
@@ -79,8 +89,6 @@ function createDownBtn(ele){
 /* Proper coding practice: http://enterprisejquery.com/2010/10/how-good-c-habits-can-encourage-bad-javascript-habits-part-1/ */
 //Self-Executing Anonymous Func: Part 2 (Public & Private)
 (function( handleList, $, undefined){
-
-      var UPVOTE_DELAY = 20000;
 
       // check if a dictionary is empty
       handleList.isEmpty = function(dict) {
@@ -165,7 +173,6 @@ function createDownBtn(ele){
                 $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
             } 
           }
-        bindShit();
         }
 
 
@@ -201,4 +208,30 @@ $(document).ready(function() {
         });
         return false;
     });
+
+  $('#playPlaylistBtn').click(function() {
+    musicPlayer.setPaused = false;
+
+    $(this).css("display","none");
+    $("#pausePlaylistBtn").css("display","block");
+
+    console.log(musicPlayer);
+
+    if (musicPlayer.setStarted == false) {
+      musicPlayer.setStarted = true;
+      musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+      $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
+    }
+    musicPlayer.curTrackObject.play();
+
+  });
+
+  $('#pausePlaylistBtn').click(function() {
+    musicPlayer.setPaused = true;
+    $(this).css("display","none");
+    $("#playPlaylistBtn").css("display","block");
+
+    musicPlayer.curTrackObject.pause();
+  });
+
 });
