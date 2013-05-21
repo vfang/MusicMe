@@ -5,7 +5,7 @@ function createUpvoteBtn(ele) {
 }
 
 function createPlaylistElement(ele){
-	var html = "<div class='panel songpanel'>" /*+ createPlayBtn(ele)*/ + ele.songtitle + " - " + ele.artist + "<div id='voteContainer'>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "<b id='votes'>" + ele.votecount + " </b>" + "</div>" + "</div>";
+	var html = "<div class='panel songpanel'>" /*+ createPlayBtn(ele)*/ + "<div id='songInf'>" + ele.songtitle + " - " + ele.artist + "</div>" + "<div id='voteContainer'>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "<div id='votes'>" + ele.votecount + " </div>" + "</div>" + "</div>";
 	
 	return html; 
 }
@@ -193,7 +193,33 @@ function createDownBtn(ele){
     };
 }( window.handleList = window.handleList || {}, jQuery ));
 
+function queryString () {
+  // This function is anonymous, is executed immediately and 
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+      // If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = pair[1];
+      // If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [ query_string[pair[0]], pair[1] ];
+      query_string[pair[0]] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(pair[1]);
+    }
+  } 
+    return query_string;
+};
+
+
+
 $(document).ready(function() {
+<<<<<<< HEAD
     $('#addSong').submit(function() {
 
       $('#addedSongNotif').fadeTo('slow', 1);
@@ -217,7 +243,38 @@ $(document).ready(function() {
           }
       });
       return false;
+=======
+    var params = queryString();
+
+    $('#addSong').submit(function() { 
+        $.ajax({ 
+            data: $(this).serialize(), 
+            type: $(this).attr('method'), 
+            url: $(this).attr('action'), 
+            success: function(response) { 
+                $('#message').html(response); 
+            },
+            error: function(e, x, r) { 
+                $('#error_div').html(e); 
+            }
+        });
+        return false;
+>>>>>>> f1b94bd7ac5d3d9759e42396915cacdc4b72a3ea
     });
+
+    var tid= setInterval(mycode, 5000);
+
+    function mycode() {
+      $.ajax({
+        url: "/api/?playlist=" + params.playlist
+
+      }).done(function(response) {
+        console.log(response);
+      });
+    }
+    function abortTimer () {
+      clearInterval(tid);
+    }
 
   $('#playPlaylistBtn').click(function() {
 
