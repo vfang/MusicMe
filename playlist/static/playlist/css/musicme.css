@@ -62,3 +62,19 @@
 #voteContainer .downvotebuttonContainer {
 	float: left;
 }
+
+#addedSongNotif {
+	padding-bottom: 10px;
+	padding-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+	background-color: #2284a1;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #fff;
+}
+
+
+
+

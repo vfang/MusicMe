@@ -240,6 +240,15 @@ $(document).ready(function() {
     var params = queryString();
 
     $('#addSong').submit(function(e) {
+
+    	$('#addedSongNotif').fadeTo('slow', 1);
+    	var t = setTimeout(function() {
+      		$('#addedSongNotif').fadeTo('slow', 0);
+      		var f = setTimeout(function() {
+        		$('#addedSongNotif').css("display", "none");
+      		}, 500);
+    	},3000);
+
         $.ajax({ 
             beforeSend: function(xhr, settings) {
               xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -259,7 +268,9 @@ $(document).ready(function() {
             }
         });
         return false;
-    });
+
+    return false;
+  });
 
 
 
@@ -282,6 +293,7 @@ $(document).ready(function() {
     // }
 
   $('#playPlaylistBtn').click(function() {
+
     musicPlayer.setPaused = false;
 
     $(this).css("display","none");
