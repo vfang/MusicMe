@@ -5,6 +5,7 @@ from playlist import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^api/$', views.getPlaylist, name='getPlaylist'),      
+    url(r'^api/getPlaylist/$', views.getPlaylist),
+    url(r'^api/addSong/$', views.addSong),
 
 )
