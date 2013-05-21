@@ -186,7 +186,34 @@ function createDownBtn(ele){
     };
 }( window.handleList = window.handleList || {}, jQuery ));
 
+function queryString () {
+  // This function is anonymous, is executed immediately and 
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+      // If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = pair[1];
+      // If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [ query_string[pair[0]], pair[1] ];
+      query_string[pair[0]] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(pair[1]);
+    }
+  } 
+    return query_string;
+};
+
+
+
 $(document).ready(function() {
+    var params = queryString();
+
     $('#addSong').submit(function() { 
         $.ajax({ 
             data: $(this).serialize(), 
@@ -201,4 +228,20 @@ $(document).ready(function() {
         });
         return false;
     });
+
+    var tid= setInterval(mycode, 5000);
+
+    function mycode() {
+      $.ajax({
+        url: "/api/?playlist=" + params.playlist
+
+      }).done(function(response) {
+        console.log(response);
+      });
+    }
+    function abortTimer () {
+      clearInterval(tid);
+    }
+
+
 });

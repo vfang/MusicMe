@@ -30,14 +30,20 @@ def index(request):
 			songTitle = songInfo[0]
 			songArtist = songInfo[1]
 
+			print songArtist
+
 			key=hashlib.sha256((songTitle+songArtist).encode('utf-8')).hexdigest()
-			song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key)
+			print key
+			song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key, playlist_id=pid)
+			print created
 			if created:
 				
 				song.save()
+				print 'saved'
 				print 'TRACK: ',songTitle, ' by ', songArtist, ' saved'	
-				playlist = Playlist.objects.get(id = pid)
-				playlist.songs.add(song.id)
+				# playlist = Playlist.objects.get(id = pid)
+				# playlist.songs.add(song.id)
+
 			else:
 				print 'TRACK: ',songTitle, ' by ', songArtist, ' already exists'
 			return HttpResponse(json.dumps({'message': 'success'}))
@@ -47,7 +53,9 @@ def index(request):
 	playlist = get_object_or_404(Playlist, pk=pid)
 	SONGS = []
 
-	for song in playlist.songs.all():
+	songs = Song.objects.all().filter(playlist=pid)
+
+	for song in songs:
 		SONGS.append(song)
 	print SONGS
 
@@ -65,11 +73,20 @@ def getPlaylist(request):
 
 	songs = []
 
-	for song in playlist.songs.all():
+	for song in Song.objects.all().filter(playlist=pid):
 		songs.append(song.writeToJSON())
 
 
 	return HttpResponse(json.dumps(songs), content_type="application/json")
+
+def updateVotes(request):
+	pid = request.POST.get('playlist')
+	sid = request.POST.get('songid')
+	vid = request.POST.get('vote')
+
+
+
+
 
 
 
