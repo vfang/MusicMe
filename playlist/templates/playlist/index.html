@@ -35,22 +35,28 @@
         console.log("Error: could not load song list.");
       {% endif %}
       //handleList(SONG_LIST);
-      console.log("OK")
+      console.log("OK");
+      bindShit();
 
-      $(".samll, button").click(function(){
-        // console.log("we are here");
-        // console.log($(this).attr("id"));
-        for (var i in handleList.SONG_LIST) {
-          if ($(this).attr("id") == "play_"+handleList.SONG_LIST[i].songid)
-          {
-            var a=musicPlayer.createTrackObject(handleList.SONG_LIST[i]);
-            console.log('TITLE: ' + a.title);
-            $("#playlist_video_area").empty().append(a.render());
-            a.play();
-          }
-        }
-      });
+      // $("#addSong").submit(function() {
+      //   // e.preventDefault();
+      //   // console.log('hello')
+
+      //   $.ajax({
+      //     url: $(this).action('action'),
+      //     type: $(this).attr('method'),
+      //     data: $(this).serialize(),
+      //   }).done(function ( data ) {
+      //     // if( console && console.log ) {
+      //     //   console.log("Sample of data:", data);
+      //     // }
+      //   });
+
+
+      // });      
+    
   })
+
 
   </script>
 
