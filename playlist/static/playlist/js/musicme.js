@@ -32,58 +32,58 @@ function createDownBtn(ele){
   musicPlayer.setStarted = false;
   musicPlayer.setPaused = false;
 
-	musicPlayer.createTrackObject = function(track_ele) {
-		var track = window.tomahkAPI.Track(track_ele.songtitle,track_ele.artist, {
-    		width:300,
-    		height:300,
-        autoplay:1,
-    		disabledResolvers: [
-    			"Youtube", "Spotify"
-        	
+  musicPlayer.createTrackObject = function(track_ele) {
+    var track = window.tomahkAPI.Track(track_ele.songtitle,track_ele.artist, {
+      width:300,
+      height:300,
+      autoplay:1,
+      disabledResolvers: [
+      "Youtube", "Spotify"
+
             // options: "SoundCloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
-    		],
-    		handlers: {
-		        onloaded: function() {
+            ],
+            handlers: {
+              onloaded: function() {
 		            // console.log(track.connection+":\n  api loaded");
-		        },
-		        onended: function() {
+              },
+              onended: function() {
 		        //     console.log(track.connection+":\n  Song ended: "+track.artist+" - "+track.title);
-		        },
-		        onplayable: function() {
+          },
+          onplayable: function() {
 		            // console.log(track.connection+":\n  playable");
-		        },
-		        onresolved: function(resolver, result) {
+              },
+              onresolved: function(resolver, result) {
 		            // console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
-		        },
-		        ontimeupdate: function(timeupdate) {
-		            var currentTime = timeupdate.currentTime;
-		            var duration = timeupdate.duration;
-		            currentTime = parseInt(currentTime);
-		            duration = parseInt(duration);
+              },
+              ontimeupdate: function(timeupdate) {
+                var currentTime = timeupdate.currentTime;
+                var duration = timeupdate.duration;
+                currentTime = parseInt(currentTime);
+                duration = parseInt(duration);
 
 		            // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
-		        },
-            onended: function() {
-              musicPlayer.curTrackIndex += 1;
-              if ((musicPlayer.curTrackIndex < handleList.SONG_LIST.length) && (musicPlayer.curTrackIndex > 0)) {
-                console.log("playing next");
-              } else {
-                musicPlayer.curTrackIndex = 0;
-              }
-              musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
-              $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
-            },
-            onpause: function() {
+              },
+              onended: function() {
+                musicPlayer.curTrackIndex += 1;
+                if ((musicPlayer.curTrackIndex < handleList.SONG_LIST.length) && (musicPlayer.curTrackIndex > 0)) {
+                  console.log("playing next");
+                } else {
+                  musicPlayer.curTrackIndex = 0;
+                }
+                musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+                $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
+              },
+              onpause: function() {
               // only allow pausing via pause all button
               console.log(musicPlayer);
               if (musicPlayer.setPaused == false) {
                 musicPlayer.curTrackObject.play();
               }
             }
-    		}
-		});
-		return track
-	}
+          }
+        });
+return track
+}
 }( window.musicPlayer = window.musicPlayer || {}, jQuery ));
 
 /* Proper coding practice: http://enterprisejquery.com/2010/10/how-good-c-habits-can-encourage-bad-javascript-habits-part-1/ */
@@ -96,8 +96,8 @@ function createDownBtn(ele){
           if (dict.hasOwnProperty(prop)) {
             return false;
           }
-          }
-          return true;
+        }
+        return true;
       };
 
       // dictionary with key=songid, value=votecount
@@ -106,92 +106,78 @@ function createDownBtn(ele){
       var REFRESH_INTERVAL = 10000;
 
 
-	      // timer to flush cache and refresh
-      /*setInterval(function(){
-        if (isEmpty(CACHED_VOTES) == false) {
-          {% load update_cache %}
-          //song_list = {{ CACHED_VOTES|update_votes }};
+      // TODO: change votecount on backend
+      handleList.changeVote = function(delta,id) { 
+        for (var i in handleList.SONG_LIST) {
+          if (handleList.SONG_LIST[i].songid == id) {
+            if (delta > 0) {
+              if (handleList.SONG_LIST[i].upbtndisable == "False"){
+                handleList.SONG_LIST[i].votecount += delta;
+                handleList.SONG_LIST[i].upbtndisable = "True";
+              }
+              else{
+                handleList.SONG_LIST[i].votecount -= delta;
+                handleList.SONG_LIST[i].upbtndisable = "False";
+              }
+            }
+            else {
+              if (handleList.SONG_LIST[i].downbtndisable == "False"){
+                handleList.SONG_LIST[i].votecount += delta;
+                handleList.SONG_LIST[i].downbtndisable = "True";
+              }
+              else{
+                handleList.SONG_LIST[i].votecount -= delta;
+                handleList.SONG_LIST[i].downbtndisable = "False";
+              }
+            }
+          }
         }
-        CACHED_VOTES = {};
-        {% autoescape off %}
-          showList({{ song_list }});
-        {% endautoescape %}
-      },REFRESH_INTERVAL);
-    */
-     handleList.showList = function(list) {
-      var html = "";
-      list.sort(function(a,b) {
-        if (a.votecount > b.votecount)
-          return -1;
-        if (a.votecount < b.votecount)
-          return 1;
-        return 0;
-      });
-      for(var i in list) {
-        html += createPlaylistElement(list[i]);
+
+        clearList();          
+        handleList.showList(handleList.SONG_LIST);
+        // loop through the list to see which song has been down voted and up voted, and disable that btn
+        for (var i in handleList.SONG_LIST) {
+          if (handleList.SONG_LIST[i].upbtndisable == "True") {
+            document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
+            $('#up_'+handleList.SONG_LIST[i].songid).css("background-color", "#5da423");
+          }
+          if(handleList.SONG_LIST[i].downbtndisable == "True"){
+            document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
+            $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
+          } 
+        }
       }
 
-      function changeVote(delta,id) {
-        // for now, just update the vote count from the cache entirely on the front end
-          for (var i in handleList.SONG_LIST) {
+      handleList.showList = function(list) {
+        var html = "";
+        list.sort(function(a,b) {
+          if (a.votecount > b.votecount)
+            return -1;
+          if (a.votecount < b.votecount)
+            return 1;
+          return 0;
+        });
 
-            if (handleList.SONG_LIST[i].songid == id) {
-              if (delta > 0) {
-                if (handleList.SONG_LIST[i].upbtndisable == "False"){
-                  handleList.SONG_LIST[i].votecount += delta;
-                  handleList.SONG_LIST[i].upbtndisable = "True";
-                }
-                else{
-                  handleList.SONG_LIST[i].votecount -= delta;
-                  handleList.SONG_LIST[i].upbtndisable = "False";
-                }
-              }
-              else {
-                if (handleList.SONG_LIST[i].downbtndisable == "False"){
-                  handleList.SONG_LIST[i].votecount += delta;
-                  handleList.SONG_LIST[i].downbtndisable = "True";
-                }
-                else{
-                  handleList.SONG_LIST[i].votecount -= delta;
-                  handleList.SONG_LIST[i].downbtndisable = "False";
-                }
-
-              }
-            }
-          }
-
-          clearList();          
-          handleList.showList(handleList.SONG_LIST);
-          //loop through the list to see which song has been down voted and up voted, and disable that btn
-          for (var i in handleList.SONG_LIST) {
-            if (handleList.SONG_LIST[i].upbtndisable == "True") {
-                document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
-                $('#up_'+handleList.SONG_LIST[i].songid).css("background-color", "#5da423");
-            }
-            if(handleList.SONG_LIST[i].downbtndisable == "True"){
-                document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
-                $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
-            } 
-          }
+        for(var i in list) {
+          html += createPlaylistElement(list[i]);
         }
 
+        $('#playlist').append(html);
+        // event handler for click on upvote button
+        $('.upvotebutton').click(function() {
+          var prefix = "up_";
+          var id = $(this).attr('id').substring(prefix.length);
+          handleList.changeVote(1,id);
+        });
 
-      $('#playlist').append(html);
-      // event handler for click on upvote button
-      $('.upvotebutton').click(function() {
-        var prefix = "up_";
-        var id = $(this).attr('id').substring(prefix.length);
-        changeVote(1,id);
-      });
+        $('.downvotebutton').click(function() {
+          var prefix = "down_";
+          var id = $(this).attr('id').substring(prefix.length);
+          handleList.changeVote(-1,id);
+        })
 
-      $('.downvotebutton').click(function() {
-        var prefix = "down_";
-        var id = $(this).attr('id').substring(prefix.length);
-        changeVote(-1,id);
-      })
-
-    };
-}( window.handleList = window.handleList || {}, jQuery ));
+      };
+  }( window.handleList = window.handleList || {}, jQuery ));
 
 function queryString () {
   // This function is anonymous, is executed immediately and 
@@ -202,8 +188,8 @@ function queryString () {
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
       // If first entry with this name
-    if (typeof query_string[pair[0]] === "undefined") {
-      query_string[pair[0]] = pair[1];
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = pair[1];
       // If second entry with this name
     } else if (typeof query_string[pair[0]] === "string") {
       var arr = [ query_string[pair[0]], pair[1] ];
@@ -213,50 +199,50 @@ function queryString () {
       query_string[pair[0]].push(pair[1]);
     }
   } 
-    return query_string;
+  return query_string;
 };
 
 // using jQuery
 function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
             // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
             }
+          }
         }
-    }
-    return cookieValue;
-}
+        return cookieValue;
+      }
 
-var csrftoken = getCookie('csrftoken');
+      var csrftoken = getCookie('csrftoken');
 
 
-$(document).ready(function() {
-    var params = queryString();
+      $(document).ready(function() {
+        var params = queryString();
 
-    $('#addSong').submit(function(e) {
+        $('#addSong').submit(function(e) {
 
-    	$('#addedSongNotif').fadeTo('slow', 1);
-    	var t = setTimeout(function() {
-      		$('#addedSongNotif').fadeTo('slow', 0);
-      		var f = setTimeout(function() {
-        		$('#addedSongNotif').css("display", "none");
-      		}, 500);
-    	},3000);
+         $('#addedSongNotif').fadeTo('slow', 1);
+         var t = setTimeout(function() {
+          $('#addedSongNotif').fadeTo('slow', 0);
+          var f = setTimeout(function() {
+            $('#addedSongNotif').css("display", "none");
+          }, 500);
+        },3000);
 
-        $.ajax({ 
-            beforeSend: function(xhr, settings) {
-              xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },          
-            type : 'POST', 
-            url : "/api/addSong/", 
-            data : { 
-              'playlist' : params.playlist,
+         $.ajax({ 
+          beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          },          
+          type : 'POST', 
+          url : "/api/addSong/", 
+          data : { 
+            'playlist' : params.playlist,
               'songsearch' : $("#songsearch").val() //$(this).serialize(),
             },
             success: function(response) { 
@@ -266,11 +252,11 @@ $(document).ready(function() {
             error: function(e, x, r) { 
               console.log("error - could not add song");
             }
-        });
-        return false;
+          });
+         return false;
 
-    return false;
-  });
+         return false;
+       });
 
 
 
@@ -292,30 +278,30 @@ $(document).ready(function() {
     //   clearInterval(tid);
     // }
 
-  $('#playPlaylistBtn').click(function() {
+    $('#playPlaylistBtn').click(function() {
 
-    musicPlayer.setPaused = false;
+      musicPlayer.setPaused = false;
 
-    $(this).css("display","none");
-    $("#pausePlaylistBtn").css("display","block");
+      $(this).css("display","none");
+      $("#pausePlaylistBtn").css("display","block");
 
-    console.log(musicPlayer);
+      console.log(musicPlayer);
 
-    if (musicPlayer.setStarted == false) {
-      musicPlayer.setStarted = true;
-      musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
-      $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
-    }
-    musicPlayer.curTrackObject.play();
+      if (musicPlayer.setStarted == false) {
+        musicPlayer.setStarted = true;
+        musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+        $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
+      }
+      musicPlayer.curTrackObject.play();
+
+    });
+
+    $('#pausePlaylistBtn').click(function() {
+      musicPlayer.setPaused = true;
+      $(this).css("display","none");
+      $("#playPlaylistBtn").css("display","block");
+
+      musicPlayer.curTrackObject.pause();
+    });
 
   });
-
-  $('#pausePlaylistBtn').click(function() {
-    musicPlayer.setPaused = true;
-    $(this).css("display","none");
-    $("#playPlaylistBtn").css("display","block");
-
-    musicPlayer.curTrackObject.pause();
-  });
-
-});

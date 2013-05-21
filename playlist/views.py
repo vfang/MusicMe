@@ -52,6 +52,7 @@ def addSong(request):
 
 	key=hashlib.sha256((songTitle+songArtist).encode('utf-8')).hexdigest()
 	print key
+	# FIX - check for existing songs with artist/title before creating
 	song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key, playlist_id=pid)
 	print created
 	if created:
