@@ -194,22 +194,33 @@ function createDownBtn(ele){
 }( window.handleList = window.handleList || {}, jQuery ));
 
 $(document).ready(function() {
-    $('#addSong').submit(function() { 
-        $.ajax({ 
-            data: $(this).serialize(), 
-            type: $(this).attr('method'), 
-            url: $(this).attr('action'), 
-            success: function(response) { 
-                $('#message').html(response); 
-            },
-            error: function(e, x, r) { 
-                $('#error_div').html(e); 
-            }
-        });
-        return false;
+    $('#addSong').submit(function() {
+
+      $('#addedSongNotif').fadeTo('slow', 1);
+      var t = setTimeout(function(){
+        $('#addedSongNotif').fadeTo('slow', 0);
+        var f = setTimeout(function(){
+          $('#addedSongNotif').css("display", "none");
+        }, 500);
+        
+      },3000);
+
+      $.ajax({ 
+          data: $(this).serialize(), 
+          type: $(this).attr('method'), 
+          url: $(this).attr('action'), 
+          success: function(response) { 
+              $('#message').html(response); 
+          },
+          error: function(e, x, r) { 
+              $('#error_div').html(e); 
+          }
+      });
+      return false;
     });
 
   $('#playPlaylistBtn').click(function() {
+
     musicPlayer.setPaused = false;
 
     $(this).css("display","none");
