@@ -26,8 +26,6 @@ function createDownBtn(ele){
 (function( musicPlayer, $, undefined){
 
   musicPlayer.curTrackObject = null;
-  musicPlayer.curTrackIndex = 0;
-  musicPlayer.curTrackPosn = 0;
 
   musicPlayer.setStarted = false;
   musicPlayer.setPaused = false;
@@ -46,10 +44,7 @@ function createDownBtn(ele){
               onloaded: function() {
 		            // console.log(track.connection+":\n  api loaded");
               },
-              onended: function() {
-		        //     console.log(track.connection+":\n  Song ended: "+track.artist+" - "+track.title);
-          },
-          onplayable: function() {
+              onplayable: function() {
 		            // console.log(track.connection+":\n  playable");
               },
               onresolved: function(resolver, result) {
@@ -64,13 +59,11 @@ function createDownBtn(ele){
 		            // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
               },
               onended: function() {
-                musicPlayer.curTrackIndex += 1;
-                if ((musicPlayer.curTrackIndex < handleList.SONG_LIST.length) && (musicPlayer.curTrackIndex > 0)) {
-                  console.log("playing next");
-                } else {
-                  musicPlayer.curTrackIndex = 0;
-                }
-                musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+                handleList.SONG_LIST[0].votecount = 0;
+                $("#playlist").empty();
+                handleList.showList(handleList.SONG_LIST);
+
+                musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
                 $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
               },
               onpause: function() {
@@ -295,7 +288,7 @@ function getCookie(name) {
 
       if (musicPlayer.setStarted == false) {
         musicPlayer.setStarted = true;
-        musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+        musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
         $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
       }
       musicPlayer.curTrackObject.play();
