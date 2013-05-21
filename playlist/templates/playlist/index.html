@@ -68,15 +68,16 @@
   <div class="row">
     <div class="large-6 large-offset-3 columns end">
       <div class="panel">
-        <h1>MusicMe</h1>
+        <h1 style="text-align: center; font-size: 3em;">MusicMe</h1>
       </div>
     </div>
   </div>
-
   <!-- End Header and Nav -->
-
-
   <div class="row">
+
+  <div class="large-6 large-offset-3 columns end">
+      <p style="margin-bottom: 2px;">To add a song, just type in the song name, (a comma), and the artist!<div style="text-align: center;"> E.g. "Mirrors, Justin Timberlake"</div></p>
+  </div>
 
  <!-- Nav Sidebar -->
     <!-- This is source ordered to be pulled to the left on larger screens -->
@@ -113,22 +114,28 @@
     <div id="playlistarea" class="large-6 large-offset-3 columns end">
       <div id="playlist_video_area"></div>
       <div class="row">
-        <div class="large-8 columns">
- 
+
+        <div class="large-8 columns" style="width: 74%;">
+
           <!--  <form action="/add/?playlist={{pid}}" method="post"> -->
            <form action="" method="post" id="addSong">
             {% csrf_token %}
-          <input type="text" placeholder="Add a song to your playlist" id="songsearch" name="songsearch"/>
+          <input type="text" placeholder="Add a song to your playlist" id="songsearch"  style="font-size: 1.25em;" name="songsearch"/>
           <input type="hidden" id="pid" name="pid" />
         </div>
-        <div class="large-4 columns">
+
           <!-- <a href="#" class="button small" css="float: left;">Submit</a> -->
 
-           <input type="submit" value="Submit" class="button small"/>
+           <input type="submit" value="Submit" class="button small" style="font-size: 1.25em;"/>
          </form>
           <div class="message"></div>
-        </div>
       </div>
+
+      <div>
+        <button id="playPlaylistBtn" class="success">Play All</button>
+        <button id="pausePlaylistBtn" class="alert">Pause</button>
+
+
       <div id="playlist">       
     
       </div>
