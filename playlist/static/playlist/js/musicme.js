@@ -219,7 +219,6 @@ function queryString () {
 
 
 $(document).ready(function() {
-<<<<<<< HEAD
     $('#addSong').submit(function() {
 
       $('#addedSongNotif').fadeTo('slow', 1);
@@ -228,7 +227,6 @@ $(document).ready(function() {
         var f = setTimeout(function(){
           $('#addedSongNotif').css("display", "none");
         }, 500);
-        
       },3000);
 
       $.ajax({ 
@@ -243,7 +241,6 @@ $(document).ready(function() {
           }
       });
       return false;
-=======
     var params = queryString();
 
     $('#addSong').submit(function() { 
@@ -259,7 +256,6 @@ $(document).ready(function() {
             }
         });
         return false;
->>>>>>> f1b94bd7ac5d3d9759e42396915cacdc4b72a3ea
     });
 
     var tid= setInterval(mycode, 5000);
