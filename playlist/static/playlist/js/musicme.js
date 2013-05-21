@@ -20,7 +20,7 @@ function createUpvoteBtn(ele) {
 }
 
 function createPlaylistElement(ele){
-	var html = "<div class='panel songpanel'>" /*+ createPlayBtn(ele)*/ + ele.songtitle + " - " + ele.artist + "<div id='voteContainer'>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "<b id='votes'>" + ele.votecount + " </b>" + "</div>" + "</div>";
+	var html = "<div class='panel songpanel'>" /*+ createPlayBtn(ele)*/ + "<div id='songInf'>" + ele.songtitle + " - " + ele.artist + "</div>" + "<div id='voteContainer'>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "<div id='votes'>" + ele.votecount + " </div>" + "</div>" + "</div>";
 	
 	return html; 
 }
