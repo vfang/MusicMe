@@ -219,44 +219,31 @@ function queryString () {
 
 
 $(document).ready(function() {
-    $('#addSong').submit(function() {
 
-      $('#addedSongNotif').fadeTo('slow', 1);
-      var t = setTimeout(function(){
-        $('#addedSongNotif').fadeTo('slow', 0);
-        var f = setTimeout(function(){
-          $('#addedSongNotif').css("display", "none");
-        }, 500);
-      },3000);
+  var params = queryString();
 
-      $.ajax({ 
-          data: $(this).serialize(), 
-          type: $(this).attr('method'), 
-          url: $(this).attr('action'), 
-          success: function(response) { 
-              $('#message').html(response); 
-          },
-          error: function(e, x, r) { 
-              $('#error_div').html(e); 
-          }
-      });
-      return false;
-    var params = queryString();
+  $('#addSong').submit(function() { 
+    $('#addedSongNotif').fadeTo('slow', 1);
+    var t = setTimeout(function(){
+      $('#addedSongNotif').fadeTo('slow', 0);
+      var f = setTimeout(function(){
+        $('#addedSongNotif').css("display", "none");
+      }, 500);
+    },3000);
 
-    $('#addSong').submit(function() { 
-        $.ajax({ 
-            data: $(this).serialize(), 
-            type: $(this).attr('method'), 
-            url: $(this).attr('action'), 
-            success: function(response) { 
-                $('#message').html(response); 
-            },
-            error: function(e, x, r) { 
-                $('#error_div').html(e); 
-            }
-        });
-        return false;
+    $.ajax({ 
+        data: $(this).serialize(), 
+        type: $(this).attr('method'), 
+        url: $(this).attr('action'), 
+        success: function(response) { 
+            $('#message').html(response); 
+        },
+        error: function(e, x, r) { 
+            $('#error_div').html(e); 
+        }
     });
+    return false;
+  });
 
     var tid= setInterval(mycode, 5000);
 
