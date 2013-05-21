@@ -247,7 +247,13 @@ function getCookie(name) {
             },
             success: function(response) { 
               console.log("added song");
-              handleList.showList(handleList.SONG_LIST);
+              $.getJSON(
+                'http://127.0.0.1:8000/api/getPlaylist/?playlist=' + params.playlist, 
+              function(data) {                 
+                handleList.SONG_LIST.push(data[data.length -1]);                 
+                clearList(); 
+                handleList.showList(handleList.SONG_LIST);
+              });                            
             },
             error: function(e, x, r) { 
               console.log("error - could not add song");
