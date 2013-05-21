@@ -58,3 +58,19 @@ def index(request):
 
 	return render_to_response('playlist/index.html', context, context_instance=RequestContext(request))
 
+def getPlaylist(request):
+	pid = request.GET.get('playlist')
+
+	playlist = get_object_or_404(Playlist, pk=pid)
+
+	songs = []
+
+	for song in playlist.songs.all():
+		songs.append(song.writeToJSON())
+
+
+	return HttpResponse(json.dumps(songs), content_type="application/json")
+
+
+
+
