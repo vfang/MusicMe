@@ -274,6 +274,5 @@ $(document).ready(function() {
 
     musicPlayer.curTrackObject.pause();
   });
->>>>>>> 206ec4e558feeec6b815002a147b5acf55f2828e
 
 });
