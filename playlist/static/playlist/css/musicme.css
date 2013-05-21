@@ -24,3 +24,17 @@
 	background-color: gray;
 	border: red;
 }
+
+.songpanel{
+	padding: .75em;
+}
+
+#playPlaylistBtn {
+	width:100%;
+	display: block;
+}
+
+#pausePlaylistBtn {
+	width:100%;
+	display: none;
+}
