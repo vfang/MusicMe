@@ -279,10 +279,6 @@ function getCookie(name) {
 
         $('#addSong').submit(function(e) {
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 2a33bb75e77c6601fa95a6b1802dc4a213fcde31
          $.ajax({ 
           beforeSend: function(xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -293,25 +289,7 @@ function getCookie(name) {
             'playlist' : params.playlist,
               'songsearch' : $("#songsearch").val() //$(this).serialize(),
             },
-<<<<<<< HEAD
-            success: function(response) { 
-              console.log("added song");
-              $.getJSON(
-                '/api/getPlaylist/?playlist=' + params.playlist, 
-              function(data) {                 
-                handleList.SONG_LIST.push(data[data.length -1]);                 
-                clearList(); 
-                handleList.showList(handleList.SONG_LIST);
-              });
 
-              $('#addedSongNotif').fadeTo('slow', 1);
-              var t = setTimeout(function() {
-              $('#addedSongNotif').fadeTo('slow', 0);
-              var f = setTimeout(function() {
-              $('#addedSongNotif').css("display", "none");
-              }, 500);
-              },3000);
-=======
             success: function(response) {
               temp = JSON.parse(response);
 
@@ -351,7 +329,6 @@ function getCookie(name) {
 
                   });
               }
->>>>>>> 2a33bb75e77c6601fa95a6b1802dc4a213fcde31
 
             },
             error: function(e, x, r) { 
