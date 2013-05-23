@@ -103,6 +103,25 @@ def addPlaylist(request):
 
 	return HttpResponseRedirect("/?playlist="+str(pid))
 
+def verifyPlaylist(request):
+	playlistName = request.POST['goToPlaylist']
+	print playlistName
+
+	if Playlist.objects.filter(name=playlistName):
+		playlist = Playlist.objects.get(name=playlistName)
+		pid = playlist.id
+
+		return HttpResponse(json.dumps({'message': 'success',
+										'pid' : pid}))
+		# return HttpResponseRedirect("/?playlist="+str(pid))
+	else:
+		print 'Playlist does not exist'
+		context = Context({
+				'error' : True,
+				'playlistName' : playlistName,				
+				})
+		return HttpResponse(json.dumps({'message': 'error'}))
+		# return render_to_response('playlist/intro.html', context, context_instance=RequestContext(request))
 
 
 

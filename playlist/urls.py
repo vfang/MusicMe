@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'^api/getPlaylist/$', views.getPlaylist),
     url(r'^api/addSong/$', views.addSong),
     url(r'^api/addPlaylist/$', views.addPlaylist),
+    url(r'^api/verifyPlaylist/$', views.verifyPlaylist),
 
 )

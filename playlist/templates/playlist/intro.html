@@ -21,42 +21,6 @@
 
   <script type="text/javascript">
 
-    $(document).ready(function(){
-
-    //var SONG_LIST_temp = [];
-      console.log("ready")      
-      {% if song_list %}
-        {% autoescape off %}
-          handleList.SONG_LIST = {{song_list}};          
-          handleList.showList(handleList.SONG_LIST);
-          // console.log(SONG_LIST);
-        {% endautoescape %}
-      {% else %}
-        console.log("Error: could not load song list.");
-      {% endif %}
-      //handleList(SONG_LIST);
-      console.log("OK");
-
-      // $("#addSong").submit(function() {
-      //   // e.preventDefault();
-      //   // console.log('hello')
-
-      //   $.ajax({
-      //     url: $(this).action('action'),
-      //     type: $(this).attr('method'),
-      //     data: $(this).serialize(),
-      //   }).done(function ( data ) {
-      //     // if( console && console.log ) {
-      //     //   console.log("Sample of data:", data);
-      //     // }
-      //   });
-
-
-      // });      
-    
-  })
-
-
   </script>
 
 </head>
@@ -71,109 +35,59 @@
       </div>
       <div class="introPage">
         <p id="intro"> Add introduction in the HTML.... dfd </p>
-        <!-- <input id="newplaylist" value="New Playlist" type="button" class="button" style="width: 100%"/></input> -->
-        <input id="existplaylist" value="Exist Playlist" type="button" class="button" style="width: 100%"/></input>
+      <!--   <input id="existplaylist" value="Exist Playlist" type="button" class="button" style="width: 100%"/></input> -->
       </div>
     </div>
   </div>
   <!-- End Header and Nav -->
   <div class="row">
 
-<!--   <div class="large-6 large-offset-3 columns end">
-      <p style="margin-bottom: 2px;">To add a song, just type in the song name, (a comma), and the artist!<div style="text-align: center;"> E.g. "Mirrors, Justin Timberlake"</div></p>
-  </div> -->
-
- <!-- Nav Sidebar -->
-    <!-- This is source ordered to be pulled to the left on larger screens -->
-    <!-- <div class="large-3 columns ">
-      <div class="panel">
-        <a href="#"><img src="http://placehold.it/300x240&text=[img]" /></a>
-        <h5><a href="#">Your Name</a></h5>
-          <div class="section-container vertical-nav" data-section data-options="deep_linking: false; one_up: true">
-          <section class="section">
-            <h5 class="title"><a href="#">Section 1</a></h5>
-          </section>
-          <section class="section">
-            <h5 class="title"><a href="#">Section 2</a></h5>
-          </section>
-          <section class="section">
-            <h5 class="title"><a href="#">Section 3</a></h5>
-          </section>
-          <section class="section">
-            <h5 class="title"><a href="#">Section 4</a></h5>
-          </section>
-          <section class="section">
-            <h5 class="title"><a href="#">Section 5</a></h5>
-          </section>
-          <section class="section">
-            <h5 class="title"><a href="#">Section 6</a></h5>
-          </section>
-        </div>
-
-      </div>
-    </div> -->
-
    <!-- Main Feed -->
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div id="playlistarea" class="large-6 large-offset-3 columns end">
       <div class="row">
-
-        <div id="addnewplaylist" class="large-8 columns" style="width: 50%;">
-
-          <!--  <form action="/add/?playlist={{pid}}" method="post"> -->
-           <form action="/api/addPlaylist/" method="post" id="addPlaylist">
+       <h2>Add a New Playlist</h2>
+        <div class="large-9 columns">
+         
+          <form action="/api/addPlaylist/" method="post" id="addPlaylist">
             {% csrf_token %}
           <input type="text" placeholder="Create a new playlist" id="playlistName"  style="font-size: 1.25em;" name="playlistName"/>
         </div>
+        <div class="large-3 columns">
           <!-- <a href="#" class="button small" css="float: left;">Submit</a> -->
            <input type="submit" value="Add" class="button small" style="font-size: 1.25em;"/>
          </form>
-      </div>
 
-<!--       <div>
-        <button id="playPlaylistBtn" class="success" style="font-size: 1.25em;">Play All</button>
-        <button id="pausePlaylistBtn" class="alert">Pause</button>
-        <div id="addedSongNotif" style="display:none">Song added to playlist</div>
+       </div>
+     </div>
 
-      <div id="playlist">       
-    
-      </div>
-      
-      
-      
-      
+        <div class="row">
+          <h2>Go to Existing Playlist</h2>
 
-    </div> -->
-
-    <!-- Right Sidebar -->
-    <!-- On small devices this column is hidden -->
-    <!-- <aside class="large-3 columns hide-for-small">
-      <p><img src="http://placehold.it/300x440&text=[ad]" /></p>
-      <p><img src="http://placehold.it/300x440&text=[ad]" /></p>
-    </aside> -->
-
-  </div>
-  <!-- Footer -->
-
-  <!-- <footer class="row">
-    <div class="large-12 columns">
-      <hr />
-      <div class="row">
-        <div class="large-5 columns">
-          <p>&copy; Copyright no one at all. Go to town.</p>
+        <div class="large-9 columns">
+        
+          <form action="" method="post" id="goToPlaylist">
+            {% csrf_token %}
+          <input type="text" placeholder="Go to a playlist" id="goToPlaylists"  style="font-size: 1.25em;" name="goToPlaylist"/>
+        <div id="playlistError" style="display:none">Playlist does not exist</div>
         </div>
-        <div class="large-7 columns">
-          <ul class="inline-list right">
-            <li><a href="#">Section 1</a></li>
-            <li><a href="#">Section 2</a></li>
-            <li><a href="#">Section 3</a></li>
-            <li><a href="#">Section 4</a></li>
-            <li><a href="#">Section 5</a></li>
-            <li><a href="#">Section 6</a></li>
-          </ul>
+        <div class="large-3 columns">
+          <!-- <a href="#" class="button small" css="float: left;">Submit</a> -->
+           <input type="submit" value="Go!" class="button small" style="font-size: 1.25em;"/>
+         </form>
+
+        
+
+       </div>
+
         </div>
+
+
       </div>
-    </div>
-  </footer> -->
+
+
+
+</div>
+
 </body>
 </html>
