@@ -37,15 +37,12 @@ def index(request):
 
 def addSong(request):
 	pid = request.POST['playlist']
-	songInfo = request.POST['songsearch']
+	songArtist = request.POST['songsearch_artist']
+	songTitle = request.POST['songsearch_song']
 
-	print songInfo, pid
+	print pid
 
-	songInfo = re.split(', ', songInfo)
-	songTitle = songInfo[0]
-	songArtist = songInfo[1]
-
-	print songInfo
+	# print songInfo
 	print songTitle
 	print songArtist
 
