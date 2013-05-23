@@ -5,10 +5,18 @@
 
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <meta name="viewport" content="width=device-width" />
   <title>MusicMe</title>
-
   
+  <!-- APIs -->
+
+  <script src="http://toma.hk/api.js?v=1"></script>
+  <script type="text/javascript" src="{% static "playlist/js/lastfm.api.md5.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/lastfm.api.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/lastfm.api.cache.js" %}"></script>
+
+
   <link rel="stylesheet" href="{% static "playlist/css/foundation.css" %}" />
   <link rel="stylesheet" href="{% static "playlist/css/musicme.css" %}" />
   <link rel="stylesheet" type="text/css" href="{% static "playlist/css/normalize.css" %}">
@@ -16,15 +24,14 @@
   <script src="{% static "playlist/js/vendor/custom.modernizr.js" %}"></script>
   <script type="text/javascript" src="{% static "playlist/js/vendor/jquery.js" %}"></script>
   <script type="text/javascript" src="{% static "playlist/js/musicme.js" %}"></script>
-  
-  <script src="http://toma.hk/api.js?v=1"></script>
+
 
   <script type="text/javascript">
 
     $(document).ready(function(){
 
     //var SONG_LIST_temp = [];
-      console.log("ready")      
+      //console.log("ready")      
       {% if song_list %}
         {% autoescape off %}
           handleList.SONG_LIST = {{song_list}};          
@@ -35,7 +42,7 @@
         console.log("Error: could not load song list.");
       {% endif %}
       //handleList(SONG_LIST);
-      console.log("OK");
+      //console.log("OK");
 
       // $("#addSong").submit(function() {
       //   // e.preventDefault();
@@ -52,9 +59,9 @@
       //   });
 
 
-      // });      
-    
-  })
+      // });     
+
+      }); 
 
 
   </script>
@@ -121,11 +128,12 @@
             <!-- {% csrf_token %} -->
           <input type="text" placeholder="Add a song to your playlist" id="songsearch"  style="font-size: 1.25em;" name="songsearch"/>
           <input type="hidden" id="pid" name="pid" />
+          <div class="searchResultContainer"></div>
         </div>
 
           <!-- <a href="#" class="button small" css="float: left;">Submit</a> -->
 
-           <input type="submit" value="Submit" class="button small" style="font-size: 1.25em;"/>
+           <input type="submit" value="Submit" class="button small" id="enterbutton" style="font-size: 1.25em;"/>
          </form>
           <div class="message"></div>
       </div>

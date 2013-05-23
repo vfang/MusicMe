@@ -38,7 +38,7 @@ function createDownBtn(ele){
       height:300,
       autoplay:1,
       disabledResolvers: [
-      "Youtube", "Spotify"
+      "SoundCloud", "SpotifyMetadata"
 
             // options: "SoundCloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
             ],
@@ -225,15 +225,9 @@ function getCookie(name) {
       $(document).ready(function() {
         var params = queryString();
 
+
         $('#addSong').submit(function(e) {
 
-         $('#addedSongNotif').fadeTo('slow', 1);
-         var t = setTimeout(function() {
-          $('#addedSongNotif').fadeTo('slow', 0);
-          var f = setTimeout(function() {
-            $('#addedSongNotif').css("display", "none");
-          }, 500);
-        },3000);
 
          $.ajax({ 
           beforeSend: function(xhr, settings) {
@@ -248,12 +242,21 @@ function getCookie(name) {
             success: function(response) { 
               console.log("added song");
               $.getJSON(
-                'http://127.0.0.1:8000/api/getPlaylist/?playlist=' + params.playlist, 
+                '/api/getPlaylist/?playlist=' + params.playlist, 
               function(data) {                 
                 handleList.SONG_LIST.push(data[data.length -1]);                 
                 clearList(); 
                 handleList.showList(handleList.SONG_LIST);
-              });                            
+              });
+
+              $('#addedSongNotif').fadeTo('slow', 1);
+              var t = setTimeout(function() {
+              $('#addedSongNotif').fadeTo('slow', 0);
+              var f = setTimeout(function() {
+              $('#addedSongNotif').css("display", "none");
+              }, 500);
+              },3000);
+
             },
             error: function(e, x, r) { 
               console.log("error - could not add song");
@@ -309,5 +312,80 @@ function getCookie(name) {
 
       musicPlayer.curTrackObject.pause();
     });
+
+  });
+
+var SEARCH_RESULT_LIST = {};
+var SEARCH_LIST_FROM_NUM = {};
+
+$(document).ready(function() {
+      //// LASTFM search stuff ////
+  /* Create a cache object */
+  var cache = new LastFMCache();
+
+  /* Create a LastFM object */
+  var lastfm = new LastFM({
+    apiKey    : 'cdafc0e03ea8b9eee8bb7f5a3708c5ac',
+    apiSecret : '338fa6de0fd1c2de4093134ea75c75ca',
+    cache     : cache
+  });
+
+  /*lastfm.artist.search({artist: /*input}, {success: function(data){
+    //If we want to have an artist search.
+    //Populate the autosearch here.
+  }})*/
+  var typingTimer;
+  var doneTypingInterval = 200;
+
+  
+
+  $("#songsearch").keyup(function(event) {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(
+      function() {
+        if(event.keyCode == 13) { $("#enterbutton").click(); }
+        else if ((event.keyCode >= 48 && event.keyCode <= 122) || event.keyCode == 8) {
+          var query = $('#songsearch').val();
+
+          lastfm.track.search({track: query, limit: 15}, {success: function(data){
+            //console.log(data);
+            $('.searchResult').remove();
+            
+            for(var song in data.results.trackmatches.track){
+              console.log('Song ::: ' + song);
+              var matchingSong = document.createElement('div');
+              matchingSong.className = "searchResult";
+              matchingSong.innerHTML += '<b> '+data.results.trackmatches.track[song].name+'</b>, '+data.results.trackmatches.track[song].artist;
+
+              $('.searchResultContainer').append(matchingSong);
+
+              // add class to search result list
+              //var key = data.results.trackmatches.track[song].name + ', ' + data.results.trackmatches.track[song].artist;
+              //SEARCH_RESULT_LIST[key] = data.results.trackmatches.track[song];
+            }
+
+            $('.searchResult').click(function() {
+              //console.log($(this).text());
+              $("#songsearch").val($(this).text());
+              //Functionality for Searching for song.
+              $('.searchResult').remove();
+            });
+
+            searchWidth = $("#songsearch").css("width");
+            $('.searchResultContainer').css("width", searchWidth);
+
+            $('#search').focus(function() {
+             $('.searchResultContainer').show();
+            }); 
+
+          }})
+
+        }
+      },
+      doneTypingInterval
+      );
+  }); 
+
+
 
   });

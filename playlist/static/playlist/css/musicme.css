@@ -25,12 +25,14 @@
 	width:100%;
 	display: block;
 	top: -13px;
+	font-size: 1.25em;
 }
 
 #pausePlaylistBtn {
 	width:100%;
 	display: none;
 	top: -13px; 
+	font-size: 1.25em;
 }
 
 #songInf {
