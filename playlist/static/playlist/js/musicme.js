@@ -103,6 +103,44 @@ return track
       handleList.changeVote = function(delta,id) { 
         for (var i in handleList.SONG_LIST) {
           if (handleList.SONG_LIST[i].songid == id) {
+             var params = queryString();
+             $.ajax({ 
+              beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+              },          
+              type : 'POST', 
+              url : "/api/changeVote/", 
+              data : { 
+                  'playlist' : params.playlist,
+                  'songid' : id,
+                  'delta' : delta                  
+                },
+                success: function(response) { 
+                  console.log("found playlist");
+                  temp = JSON.parse(response);
+
+                  if(temp["message"] == "error") {
+                    console.log('playlist does not exist');
+                    $('#playlistError').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#playlistError').fadeTo('slow', 0);
+                      var f = setTimeout(function() {
+                        $('#playlistError').css("display", "none");
+                      }, 500);
+                    },3000);
+                  }
+
+                  else {
+                  pid = temp["pid"];
+                  window.location.href = '/?playlist='+pid;
+                  }                          
+                },
+                error: function(e, x, r) { 
+                  console.log("error - could not change vote");
+                }
+              });
+
+
             if (delta > 0) {
               if (handleList.SONG_LIST[i].upbtndisable == "False"){
                 handleList.SONG_LIST[i].votecount += delta;
@@ -301,14 +339,7 @@ function getCookie(name) {
               else {
               pid = temp["pid"];
               window.location.href = '/?playlist='+pid;
-              }
-              // $.getJSON(
-              //   '/api/getPlaylist/?playlist=' + params.playlist, 
-              // function(data) {                 
-              //   handleList.SONG_LIST.push(data[data.length -1]);                 
-              //   clearList(); 
-              //   handleList.showList(handleList.SONG_LIST);
-              // });                            
+              }                          
             },
             error: function(e, x, r) { 
               console.log("error - could not add song");
@@ -318,24 +349,19 @@ function getCookie(name) {
          return false;
        });
 
+    var tid= setInterval(mycode, 5000);
 
+    function mycode() {
+      $.ajax({
+        url: "/api/getPlaylist/?playlist=" + params.playlist
 
-
-
-
-    // var tid= setInterval(mycode, 5000);
-
-    // function mycode() {
-    //   $.ajax({
-    //     url: "/api/getPlaylist/?playlist=" + params.playlist
-
-    //   }).done(function(response) {
-    //     console.log(response);
-    //   });
-    // }
-    // function abortTimer () {
-    //   clearInterval(tid);
-    // }
+      }).done(function(response) {
+        console.log(response);
+      });
+    }
+    function abortTimer () {
+      clearInterval(tid);
+    }
 
     $('#playPlaylistBtn').click(function() {
 

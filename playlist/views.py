@@ -110,22 +110,22 @@ def verifyPlaylist(request):
 		playlist = Playlist.objects.get(name=playlistName)
 		pid = playlist.id
 
-		return HttpResponse(json.dumps({'message': 'success',
-										'pid' : pid}))
-		# return HttpResponseRedirect("/?playlist="+str(pid))
+		return HttpResponse(json.dumps({'message': 'success', 'pid' : pid}))
 	else:
 		print 'Playlist does not exist'
-		context = Context({
-				'error' : True,
-				'playlistName' : playlistName,				
-				})
+		context = Context({ 'error' : True, 'playlistName' : playlistName })
 		return HttpResponse(json.dumps({'message': 'error'}))
-		# return render_to_response('playlist/intro.html', context, context_instance=RequestContext(request))
 
+def changeVote(request):
 
+	pid = request.POST.get('playlist')
+	sid = request.POST.get('songid')
+	votes = request.POST.get('delta')
 
+	songs = Song.objects.all().filter(playlist=pid, songid=sid)
+	for song in songs:
+		song.votecount = song.votecount + int(votes)
+		song.save()
 
-
-
-
-
+	return HttpResponse(json.dumps({'message': 'success', 'pid' : pid}))
+	
