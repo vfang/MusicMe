@@ -1,7 +1,7 @@
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
-	return "<div class='upvotebuttonContainer'><button class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>^</button></div>";
+	return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>^</button></div>";
 }
 
 function createPlaylistElement(ele){
@@ -20,7 +20,7 @@ function clearList() {
 }
 
 function createDownBtn(ele){
-	return "<div class='downvotebuttonContainer'><button class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>v</button></div>";
+	return "<div class='downvotebuttonContainer'><button type='button' class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>v</button></div>";
 }
 
 (function( musicPlayer, $, undefined){
@@ -104,6 +104,7 @@ return track
         for (var i in handleList.SONG_LIST) {
           if (handleList.SONG_LIST[i].songid == id) {
              var params = queryString();
+
              $.ajax({ 
               beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -178,7 +179,7 @@ return track
           }
         }
 
-        clearList();          
+        clearList();
         handleList.showList(handleList.SONG_LIST);
         // loop through the list to see which song has been down voted and up voted, and disable that btn
         for (var i in handleList.SONG_LIST) {
@@ -191,6 +192,7 @@ return track
             $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
           } 
         }
+        return false;
       }
 
       handleList.showList = function(list) {
@@ -209,16 +211,20 @@ return track
 
         $('#playlist').append(html);
         // event handler for click on upvote button
-        $('.upvotebutton').click(function() {
+        $('.upvotebutton').click(function(e) {
+          e.preventDefault;
           var prefix = "up_";
           var id = $(this).attr('id').substring(prefix.length);
           handleList.changeVote(1,id);
+          return false;
         });
 
-        $('.downvotebutton').click(function() {
+        $('.downvotebutton').click(function(e) {
+          e.preventDefault;
           var prefix = "down_";
           var id = $(this).attr('id').substring(prefix.length);
           handleList.changeVote(-1,id);
+          return false;
         })
 
       };
@@ -409,6 +415,7 @@ function getCookie(name) {
       musicPlayer.curTrackObject.play();
 
     });
+
 
     $('#pausePlaylistBtn').click(function() {
       musicPlayer.setPaused = true;
