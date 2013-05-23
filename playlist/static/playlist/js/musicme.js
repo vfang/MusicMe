@@ -241,7 +241,7 @@ function getCookie(name) {
             success: function(response) { 
               console.log("added song");
               $.getJSON(
-                'http://127.0.0.1:8000/api/getPlaylist/?playlist=' + params.playlist, 
+                '/api/getPlaylist/?playlist=' + params.playlist, 
               function(data) {                 
                 handleList.SONG_LIST.push(data[data.length -1]);                 
                 clearList(); 
