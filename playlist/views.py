@@ -31,8 +31,7 @@ def index(request):
 
 	currentSongList = make_song_json_list(SONGS)
 	print currentSongList
-	context = Context({'song_list': currentSongList, 'pid': pid})
-	template = loader.get_template('playlist/index.html')
+	context = Context({'song_list': currentSongList, 'pid': pid, 'playlistName' : playlist.name })	
 
 	return render_to_response('playlist/index.html', context, context_instance=RequestContext(request))
 
