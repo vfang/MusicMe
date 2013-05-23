@@ -52,19 +52,24 @@ def addSong(request):
 	key=hashlib.sha256((songTitle+songArtist).encode('utf-8')).hexdigest()
 	print key
 	# FIX - check for existing songs with artist/title before creating
-	song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key, playlist_id=pid)
-	print created
-	if created:
-		
-		song.save()
-		print 'saved'
-		print 'TRACK: ',songTitle, ' by ', songArtist, ' saved'	
-		# playlist = Playlist.objects.get(id = pid)
-		# playlist.songs.add(song.id)
-
+	if Song.objects.filter(artist__iexact=songArtist, title__iexact=songTitle, playlist_id=pid):
+		print 'ERROR: %s already exists' % (songTitle)
+		return HttpResponse(json.dumps({'message': 'error - duplicate entry'}))
 	else:
-		print 'TRACK: ',songTitle, ' by ', songArtist, ' already exists'
-	return HttpResponse(json.dumps({'message': 'success'}))
+
+		song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key, playlist_id=pid)
+		print created
+		if created:
+			
+			song.save()
+			print 'saved'
+			print 'TRACK: ',songTitle, ' by ', songArtist, ' saved'	
+			# playlist = Playlist.objects.get(id = pid)
+			# playlist.songs.add(song.id)
+
+		else:
+			print 'TRACK: ',songTitle, ' by ', songArtist, ' already exists'
+		return HttpResponse(json.dumps({'message': 'success'}))
 
 
 

@@ -220,14 +220,6 @@ function getCookie(name) {
 
         $('#addSong').submit(function(e) {
 
-         $('#addedSongNotif').fadeTo('slow', 1);
-         var t = setTimeout(function() {
-          $('#addedSongNotif').fadeTo('slow', 0);
-          var f = setTimeout(function() {
-            $('#addedSongNotif').css("display", "none");
-          }, 500);
-        },3000);
-
          $.ajax({ 
           beforeSend: function(xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -238,23 +230,46 @@ function getCookie(name) {
             'playlist' : params.playlist,
               'songsearch' : $("#songsearch").val() //$(this).serialize(),
             },
-            success: function(response) { 
-              console.log("added song");
-              $.getJSON(
-                '/api/getPlaylist/?playlist=' + params.playlist, 
-              function(data) { 
-                if(handleList.SONG_LIST){                
-                  handleList.SONG_LIST.push(data[data.length -1]);                 
-                  clearList(); 
-                  handleList.showList(handleList.SONG_LIST);
-                } else {
-                  console.log('hi');
-                  var tempList = data[data.length -1];
+            success: function(response) {
+              temp = JSON.parse(response);
 
-                  // var handleList.SONG_LIST = data[data.length -1];
-                  handleList.showList(tempList);
-                }
-              });                            
+              if(temp["message"] == "error - duplicate entry") {
+                console.log("ERROR: Entry already exists");
+                $('#addedSongNotifError').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#addedSongNotifError').fadeTo('slow', 0);
+                    var f = setTimeout(function() {
+                      $('#addedSongNotifError').css("display", "none");
+                    }, 500);
+                  },3000);
+
+              }
+              else { 
+                console.log("added song");
+                $.getJSON(
+                  '/api/getPlaylist/?playlist=' + params.playlist, 
+                  function(data) { 
+                    if(handleList.SONG_LIST){                
+                      handleList.SONG_LIST.push(data[data.length -1]);                 
+                      clearList(); 
+                      handleList.showList(handleList.SONG_LIST);
+                    } else {
+                      var tempList = data[data.length -1];
+                      handleList.showList(tempList);
+                    }
+
+                   $('#addedSongNotif').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#addedSongNotif').fadeTo('slow', 0);
+                    var f = setTimeout(function() {
+                      $('#addedSongNotif').css("display", "none");
+                    }, 500);
+                  },3000);
+
+
+                  });
+              }
+
             },
             error: function(e, x, r) { 
               console.log("error - could not add song");
