@@ -16,9 +16,9 @@ def index(request):
 
 	if (pid is None):
 		context = Context()
-		template = loader.get_template('playlist/index.html')
+		template = loader.get_template('playlist/intro.html')
 
-		return render_to_response('playlist/index.html', context, context_instance=RequestContext(request))
+		return render_to_response('playlist/intro.html', context, context_instance=RequestContext(request))
 
 	playlist = get_object_or_404(Playlist, pk=pid)
 	SONGS = []
@@ -85,6 +85,23 @@ def updateVotes(request):
 	sid = request.POST.get('songid')
 	vid = request.POST.get('vote')
 
+
+def addPlaylist(request):
+	playlistName = request.POST['playlistName']
+
+	print 'adding playlist'
+
+	if Playlist.objects.filter(name=playlistName):
+		print 'Playlist exists'
+	else:
+		Playlist.objects.create(name=playlistName)
+
+	playlist = Playlist.objects.get(name=playlistName)
+	pid = playlist.id
+
+	print pid
+
+	return HttpResponseRedirect("/?playlist="+str(pid))
 
 
 

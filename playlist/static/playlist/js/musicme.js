@@ -251,7 +251,8 @@ function getCookie(name) {
             error: function(e, x, r) { 
               console.log("error - could not add song");
             }
-          });
+          });        
+
          return false;
 
          return false;

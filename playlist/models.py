@@ -5,8 +5,12 @@ import hashlib
 
 class Playlist(models.Model):
 	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=200)
 	# songs = models.ForeignKey(Song)
 	# songs = models.OneToManyField(Song)
+
+	def __unicode__(self):
+		return u'%s' % (self.name)
 
 ## Container object for a song
 class Song(models.Model):
