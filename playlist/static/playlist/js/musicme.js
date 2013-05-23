@@ -143,8 +143,15 @@ return track
 
             if (delta > 0) {
               if (handleList.SONG_LIST[i].upbtndisable == "False"){
-                handleList.SONG_LIST[i].votecount += delta;
-                handleList.SONG_LIST[i].upbtndisable = "True";
+                if(handleList.SONG_LIST[i].downbtndisable == "True"){
+                  handleList.SONG_LIST[i].votecount += delta*2;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                  handleList.SONG_LIST[i].downbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                } 
               }
               else{
                 handleList.SONG_LIST[i].votecount -= delta;
@@ -153,8 +160,15 @@ return track
             }
             else {
               if (handleList.SONG_LIST[i].downbtndisable == "False"){
-                handleList.SONG_LIST[i].votecount += delta;
-                handleList.SONG_LIST[i].downbtndisable = "True";
+                if (handleList.SONG_LIST[i].upbtndisable == "True") {
+                  handleList.SONG_LIST[i].votecount += delta*2;
+                   handleList.SONG_LIST[i].downbtndisable = "True";
+                   handleList.SONG_LIST[i].upbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].downbtndisable = "True";
+                }
               }
               else{
                 handleList.SONG_LIST[i].votecount -= delta;
@@ -169,11 +183,11 @@ return track
         // loop through the list to see which song has been down voted and up voted, and disable that btn
         for (var i in handleList.SONG_LIST) {
           if (handleList.SONG_LIST[i].upbtndisable == "True") {
-            document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
+            // document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
             $('#up_'+handleList.SONG_LIST[i].songid).css("background-color", "#5da423");
           }
           if(handleList.SONG_LIST[i].downbtndisable == "True"){
-            document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
+            // document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
             $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
           } 
         }
@@ -258,14 +272,6 @@ function getCookie(name) {
 
         $('#addSong').submit(function(e) {
 
-         $('#addedSongNotif').fadeTo('slow', 1);
-         var t = setTimeout(function() {
-          $('#addedSongNotif').fadeTo('slow', 0);
-          var f = setTimeout(function() {
-            $('#addedSongNotif').css("display", "none");
-          }, 500);
-        },3000);
-
          $.ajax({ 
           beforeSend: function(xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -276,23 +282,46 @@ function getCookie(name) {
             'playlist' : params.playlist,
               'songsearch' : $("#songsearch").val() //$(this).serialize(),
             },
-            success: function(response) { 
-              console.log("added song");
-              $.getJSON(
-                '/api/getPlaylist/?playlist=' + params.playlist, 
-              function(data) { 
-                if(handleList.SONG_LIST){                
-                  handleList.SONG_LIST.push(data[data.length -1]);                 
-                  clearList(); 
-                  handleList.showList(handleList.SONG_LIST);
-                } else {
-                  console.log('hi');
-                  var tempList = data[data.length -1];
+            success: function(response) {
+              temp = JSON.parse(response);
 
-                  // var handleList.SONG_LIST = data[data.length -1];
-                  handleList.showList(tempList);
-                }
-              });                            
+              if(temp["message"] == "error - duplicate entry") {
+                console.log("ERROR: Entry already exists");
+                $('#addedSongNotifError').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#addedSongNotifError').fadeTo('slow', 0);
+                    var f = setTimeout(function() {
+                      $('#addedSongNotifError').css("display", "none");
+                    }, 500);
+                  },3000);
+
+              }
+              else { 
+                console.log("added song");
+                $.getJSON(
+                  '/api/getPlaylist/?playlist=' + params.playlist, 
+                  function(data) { 
+                    if(handleList.SONG_LIST){                
+                      handleList.SONG_LIST.push(data[data.length -1]);                 
+                      clearList(); 
+                      handleList.showList(handleList.SONG_LIST);
+                    } else {
+                      var tempList = data[data.length -1];
+                      handleList.showList(tempList);
+                    }
+
+                   $('#addedSongNotif').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#addedSongNotif').fadeTo('slow', 0);
+                    var f = setTimeout(function() {
+                      $('#addedSongNotif').css("display", "none");
+                    }, 500);
+                  },3000);
+
+
+                  });
+              }
+
             },
             error: function(e, x, r) { 
               console.log("error - could not add song");
