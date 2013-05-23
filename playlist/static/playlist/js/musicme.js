@@ -105,8 +105,15 @@ return track
           if (handleList.SONG_LIST[i].songid == id) {
             if (delta > 0) {
               if (handleList.SONG_LIST[i].upbtndisable == "False"){
-                handleList.SONG_LIST[i].votecount += delta;
-                handleList.SONG_LIST[i].upbtndisable = "True";
+                if(handleList.SONG_LIST[i].downbtndisable == "True"){
+                  handleList.SONG_LIST[i].votecount += delta*2;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                  handleList.SONG_LIST[i].downbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                } 
               }
               else{
                 handleList.SONG_LIST[i].votecount -= delta;
@@ -115,8 +122,15 @@ return track
             }
             else {
               if (handleList.SONG_LIST[i].downbtndisable == "False"){
-                handleList.SONG_LIST[i].votecount += delta;
-                handleList.SONG_LIST[i].downbtndisable = "True";
+                if (handleList.SONG_LIST[i].upbtndisable == "True") {
+                  handleList.SONG_LIST[i].votecount += delta*2;
+                   handleList.SONG_LIST[i].downbtndisable = "True";
+                   handleList.SONG_LIST[i].upbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].downbtndisable = "True";
+                }
               }
               else{
                 handleList.SONG_LIST[i].votecount -= delta;
@@ -131,11 +145,11 @@ return track
         // loop through the list to see which song has been down voted and up voted, and disable that btn
         for (var i in handleList.SONG_LIST) {
           if (handleList.SONG_LIST[i].upbtndisable == "True") {
-            document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
+            // document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
             $('#up_'+handleList.SONG_LIST[i].songid).css("background-color", "#5da423");
           }
           if(handleList.SONG_LIST[i].downbtndisable == "True"){
-            document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
+            // document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
             $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
           } 
         }
