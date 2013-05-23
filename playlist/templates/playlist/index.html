@@ -27,11 +27,13 @@
       console.log("ready")      
       {% if song_list %}
         {% autoescape off %}
-          handleList.SONG_LIST = {{song_list}};          
+          handleList.SONG_LIST = {{song_list}};
+          console.log(handleList.SONG_LIST);          
           handleList.showList(handleList.SONG_LIST);
           // console.log(SONG_LIST);
         {% endautoescape %}
       {% else %}
+        handleList.SONG_LIST = [];
         console.log("Error: could not load song list.");
       {% endif %}
       //handleList(SONG_LIST);

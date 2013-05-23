@@ -242,10 +242,18 @@ function getCookie(name) {
               console.log("added song");
               $.getJSON(
                 '/api/getPlaylist/?playlist=' + params.playlist, 
-              function(data) {                 
-                handleList.SONG_LIST.push(data[data.length -1]);                 
-                clearList(); 
-                handleList.showList(handleList.SONG_LIST);
+              function(data) { 
+                if(handleList.SONG_LIST){                
+                  handleList.SONG_LIST.push(data[data.length -1]);                 
+                  clearList(); 
+                  handleList.showList(handleList.SONG_LIST);
+                } else {
+                  console.log('hi');
+                  var tempList = data[data.length -1];
+
+                  // var handleList.SONG_LIST = data[data.length -1];
+                  handleList.showList(tempList);
+                }
               });                            
             },
             error: function(e, x, r) { 
