@@ -1,7 +1,7 @@
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
-	return "<div class='upvotebuttonContainer'><button class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>^</button></div>";
+	return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>^</button></div>";
 }
 
 function createPlaylistElement(ele){
@@ -20,14 +20,12 @@ function clearList() {
 }
 
 function createDownBtn(ele){
-	return "<div class='downvotebuttonContainer'><button class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>v</button></div>";
+	return "<div class='downvotebuttonContainer'><button type='button' class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>v</button></div>";
 }
 
 (function( musicPlayer, $, undefined){
 
   musicPlayer.curTrackObject = null;
-  musicPlayer.curTrackIndex = 0;
-  musicPlayer.curTrackPosn = 0;
 
   musicPlayer.setStarted = false;
   musicPlayer.setPaused = false;
@@ -46,10 +44,7 @@ function createDownBtn(ele){
               onloaded: function() {
 		            // console.log(track.connection+":\n  api loaded");
               },
-              onended: function() {
-		        //     console.log(track.connection+":\n  Song ended: "+track.artist+" - "+track.title);
-          },
-          onplayable: function() {
+              onplayable: function() {
 		            // console.log(track.connection+":\n  playable");
               },
               onresolved: function(resolver, result) {
@@ -64,13 +59,11 @@ function createDownBtn(ele){
 		            // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
               },
               onended: function() {
-                musicPlayer.curTrackIndex += 1;
-                if ((musicPlayer.curTrackIndex < handleList.SONG_LIST.length) && (musicPlayer.curTrackIndex > 0)) {
-                  console.log("playing next");
-                } else {
-                  musicPlayer.curTrackIndex = 0;
-                }
-                musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+                handleList.SONG_LIST[0].votecount = 0;
+                $("#playlist").empty();
+                handleList.showList(handleList.SONG_LIST);
+
+                musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
                 $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
               },
               onpause: function() {
@@ -110,10 +103,56 @@ return track
       handleList.changeVote = function(delta,id) { 
         for (var i in handleList.SONG_LIST) {
           if (handleList.SONG_LIST[i].songid == id) {
+             var params = queryString();
+
+             $.ajax({ 
+              beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+              },          
+              type : 'POST', 
+              url : "/api/changeVote/", 
+              data : { 
+                  'playlist' : params.playlist,
+                  'songid' : id,
+                  'delta' : delta                  
+                },
+                success: function(response) { 
+                  console.log("found playlist");
+                  temp = JSON.parse(response);
+
+                  if(temp["message"] == "error") {
+                    console.log('playlist does not exist');
+                    $('#playlistError').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#playlistError').fadeTo('slow', 0);
+                      var f = setTimeout(function() {
+                        $('#playlistError').css("display", "none");
+                      }, 500);
+                    },3000);
+                  }
+
+                  else {
+                  pid = temp["pid"];
+                  window.location.href = '/?playlist='+pid;
+                  }                          
+                },
+                error: function(e, x, r) { 
+                  console.log("error - could not change vote");
+                }
+              });
+
+
             if (delta > 0) {
               if (handleList.SONG_LIST[i].upbtndisable == "False"){
-                handleList.SONG_LIST[i].votecount += delta;
-                handleList.SONG_LIST[i].upbtndisable = "True";
+                if(handleList.SONG_LIST[i].downbtndisable == "True"){
+                  handleList.SONG_LIST[i].votecount += delta*2;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                  handleList.SONG_LIST[i].downbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                } 
               }
               else{
                 handleList.SONG_LIST[i].votecount -= delta;
@@ -122,8 +161,15 @@ return track
             }
             else {
               if (handleList.SONG_LIST[i].downbtndisable == "False"){
-                handleList.SONG_LIST[i].votecount += delta;
-                handleList.SONG_LIST[i].downbtndisable = "True";
+                if (handleList.SONG_LIST[i].upbtndisable == "True") {
+                  handleList.SONG_LIST[i].votecount += delta*2;
+                   handleList.SONG_LIST[i].downbtndisable = "True";
+                   handleList.SONG_LIST[i].upbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].downbtndisable = "True";
+                }
               }
               else{
                 handleList.SONG_LIST[i].votecount -= delta;
@@ -133,19 +179,20 @@ return track
           }
         }
 
-        clearList();          
+        clearList();
         handleList.showList(handleList.SONG_LIST);
         // loop through the list to see which song has been down voted and up voted, and disable that btn
         for (var i in handleList.SONG_LIST) {
           if (handleList.SONG_LIST[i].upbtndisable == "True") {
-            document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
+            // document.getElementById('down_'+handleList.SONG_LIST[i].songid).disabled = true;
             $('#up_'+handleList.SONG_LIST[i].songid).css("background-color", "#5da423");
           }
           if(handleList.SONG_LIST[i].downbtndisable == "True"){
-            document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
+            // document.getElementById('up_'+handleList.SONG_LIST[i].songid).disabled = true;
             $('#down_'+handleList.SONG_LIST[i].songid).css("background-color", "#c60f13"); 
           } 
         }
+        return false;
       }
 
       handleList.showList = function(list) {
@@ -164,16 +211,20 @@ return track
 
         $('#playlist').append(html);
         // event handler for click on upvote button
-        $('.upvotebutton').click(function() {
+        $('.upvotebutton').click(function(e) {
+          e.preventDefault;
           var prefix = "up_";
           var id = $(this).attr('id').substring(prefix.length);
           handleList.changeVote(1,id);
+          return false;
         });
 
-        $('.downvotebutton').click(function() {
+        $('.downvotebutton').click(function(e) {
+          e.preventDefault;
           var prefix = "down_";
           var id = $(this).attr('id').substring(prefix.length);
           handleList.changeVote(-1,id);
+          return false;
         })
 
       };
@@ -228,7 +279,10 @@ function getCookie(name) {
 
         $('#addSong').submit(function(e) {
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2a33bb75e77c6601fa95a6b1802dc4a213fcde31
          $.ajax({ 
           beforeSend: function(xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -239,6 +293,7 @@ function getCookie(name) {
             'playlist' : params.playlist,
               'songsearch' : $("#songsearch").val() //$(this).serialize(),
             },
+<<<<<<< HEAD
             success: function(response) { 
               console.log("added song");
               $.getJSON(
@@ -256,36 +311,117 @@ function getCookie(name) {
               $('#addedSongNotif').css("display", "none");
               }, 500);
               },3000);
+=======
+            success: function(response) {
+              temp = JSON.parse(response);
+
+              if(temp["message"] == "error - duplicate entry") {
+                console.log("ERROR: Entry already exists");
+                $('#addedSongNotifError').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#addedSongNotifError').fadeTo('slow', 0);
+                    var f = setTimeout(function() {
+                      $('#addedSongNotifError').css("display", "none");
+                    }, 500);
+                  },3000);
+
+              }
+              else { 
+                console.log("added song");
+                $.getJSON(
+                  '/api/getPlaylist/?playlist=' + params.playlist, 
+                  function(data) { 
+                    if(handleList.SONG_LIST){                
+                      handleList.SONG_LIST.push(data[data.length -1]);                 
+                      clearList(); 
+                      handleList.showList(handleList.SONG_LIST);
+                    } else {
+                      var tempList = data[data.length -1];
+                      handleList.showList(tempList);
+                    }
+
+                   $('#addedSongNotif').fadeTo('slow', 1);
+                   var t = setTimeout(function() {
+                    $('#addedSongNotif').fadeTo('slow', 0);
+                    var f = setTimeout(function() {
+                      $('#addedSongNotif').css("display", "none");
+                    }, 500);
+                  },3000);
+
+
+                  });
+              }
+>>>>>>> 2a33bb75e77c6601fa95a6b1802dc4a213fcde31
 
             },
             error: function(e, x, r) { 
               console.log("error - could not add song");
             }
-          });
+          });                 
+
          return false;
+       });
+      
+      $('#goToPlaylist').submit(function(e) {
+        console.log($("#goToPlaylists").val());
+        console.log(e);
+        //  $('#addedSongNotif').fadeTo('slow', 1);
+        //  var t = setTimeout(function() {
+        //   $('#addedSongNotif').fadeTo('slow', 0);
+        //   var f = setTimeout(function() {
+        //     $('#addedSongNotif').css("display", "none");
+        //   }, 500);
+        // },3000);
+
+         $.ajax({ 
+          beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          },          
+          type : 'POST', 
+          url : "/api/verifyPlaylist/", 
+          data : { 
+              'goToPlaylist' : $("#goToPlaylists").val() //$(this).serialize(),
+            },
+            success: function(response) { 
+              console.log("found playlist");
+              temp = JSON.parse(response);
+
+              if(temp["message"] == "error") {
+                console.log('playlist does not exist');
+                $('#playlistError').fadeTo('slow', 1);
+               var t = setTimeout(function() {
+                $('#playlistError').fadeTo('slow', 0);
+                var f = setTimeout(function() {
+                  $('#playlistError').css("display", "none");
+                }, 500);
+              },3000);
+              }
+              else {
+              pid = temp["pid"];
+              window.location.href = '/?playlist='+pid;
+              }                          
+            },
+            error: function(e, x, r) { 
+              console.log("error - could not add song");
+            }
+          });                 
 
          return false;
        });
 
+    var tid= setInterval(mycode, 5000);
 
+    function mycode() {
+      $.ajax({
+        url: "/api/getPlaylist/?playlist=" + params.playlist
 
-
-
-
-
-    // var tid= setInterval(mycode, 5000);
-
-    // function mycode() {
-    //   $.ajax({
-    //     url: "/api/getPlaylist/?playlist=" + params.playlist
-
-    //   }).done(function(response) {
-    //     console.log(response);
-    //   });
-    // }
-    // function abortTimer () {
-    //   clearInterval(tid);
-    // }
+      }).done(function(response) {
+        console.log(response);
+      });
+    }
+    function abortTimer () {
+      clearInterval(tid);
+    }
 
     $('#playPlaylistBtn').click(function() {
 
@@ -298,12 +434,13 @@ function getCookie(name) {
 
       if (musicPlayer.setStarted == false) {
         musicPlayer.setStarted = true;
-        musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[musicPlayer.curTrackIndex]);
+        musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
         $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
       }
       musicPlayer.curTrackObject.play();
 
     });
+
 
     $('#pausePlaylistBtn').click(function() {
       musicPlayer.setPaused = true;

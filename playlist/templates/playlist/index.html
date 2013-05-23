@@ -34,11 +34,13 @@
       //console.log("ready")      
       {% if song_list %}
         {% autoescape off %}
-          handleList.SONG_LIST = {{song_list}};          
+          handleList.SONG_LIST = {{song_list}};
+          console.log(handleList.SONG_LIST);          
           handleList.showList(handleList.SONG_LIST);
           // console.log(SONG_LIST);
         {% endautoescape %}
       {% else %}
+        handleList.SONG_LIST = [];
         console.log("Error: could not load song list.");
       {% endif %}
       //handleList(SONG_LIST);
@@ -74,7 +76,7 @@
   <div class="row">
     <div class="large-6 large-offset-3 columns end">
       <div class="panel">
-        <h1 style="text-align: center; font-size: 3em;">MusicMe</h1>
+        <a href="{% url 'index' %}"><h1 style="text-align: center; font-size: 3em; margin: 0">MusicMe</h1></a>
       </div>
     </div>
   </div>
@@ -82,6 +84,7 @@
   <div class="row">
 
   <div class="large-6 large-offset-3 columns end">
+      <h3 style="text-align: center">{{playlistName}}</h3>
       <p style="margin-bottom: 2px;">To add a song, just type in the song name, (a comma), and the artist!<div style="text-align: center;"> E.g. "Mirrors, Justin Timberlake"</div></p>
   </div>
 
@@ -142,6 +145,7 @@
         <button id="playPlaylistBtn" class="success" style="font-size: 1.25em;">Play All</button>
         <button id="pausePlaylistBtn" class="alert">Pause</button>
         <div id="addedSongNotif" style="display:none">Song added to playlist</div>
+        <div id="addedSongNotifError"  style="display:none">Song already exists in playlist</div>
 
       <div id="playlist">       
     
