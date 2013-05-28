@@ -4,7 +4,7 @@ var current_song;
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
-	return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>^</button></div>";
+	return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>&#x25B2;</button></div>";
 }
 
 function createPlaylistElement(ele){
@@ -23,7 +23,7 @@ function clearList() {
 }
 
 function createDownBtn(ele){
-	return "<div class='downvotebuttonContainer'><button type='button' class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>v</button></div>";
+	return "<div class='downvotebuttonContainer'><button type='button' class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>&#x25BC;</button></div>";
 }
 
 (function( musicPlayer, $, undefined){
