@@ -4,26 +4,26 @@ var current_song;
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
-	return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>&#x25B2;</button></div>";
+  return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>&#x25B2;</button></div>";
 }
 
 function createPlaylistElement(ele){
-	var html = "<div class='panel songpanel'>" /*+ createPlayBtn(ele)*/ + "<div id='songInf'>" + ele.songtitle + " - " + ele.artist + "</div>" + "<div id='voteContainer'>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "<div id='votes'>" + ele.votecount + " </div>" + "</div>" + "</div>";
-	
-	return html; 
+  var html = "<div class='panel songpanel'>" /*+ createPlayBtn(ele)*/ + "<div id='songInf'>" + ele.songtitle + " - " + ele.artist + "</div>" + "<div id='voteContainer'>" + createUpvoteBtn(ele)+ createDownBtn(ele) + "<div id='votes'>" + ele.votecount + " </div>" + "</div>" + "</div>";
+  
+  return html; 
 }
 
 //function createPlayBtn(ele) {
-//	var html = "<button class='small button playButton' id='play_" + ele.songid + "'>PLAY</button>";
-//	return html;
+//  var html = "<button class='small button playButton' id='play_" + ele.songid + "'>PLAY</button>";
+//  return html;
 //}
 
 function clearList() {
-	$('#playlist').empty();
+  $('#playlist').empty();
 }
 
 function createDownBtn(ele){
-	return "<div class='downvotebuttonContainer'><button type='button' class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>&#x25BC;</button></div>";
+  return "<div class='downvotebuttonContainer'><button type='button' class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>&#x25BC;</button></div>";
 }
 
 (function( musicPlayer, $, undefined){
@@ -45,13 +45,13 @@ function createDownBtn(ele){
             ],
             handlers: {
               onloaded: function() {
-		            // console.log(track.connection+":\n  api loaded");
+                // console.log(track.connection+":\n  api loaded");
               },
               onplayable: function() {
-		            // console.log(track.connection+":\n  playable");
+                // console.log(track.connection+":\n  playable");
               },
               onresolved: function(resolver, result) {
-		            // console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
+                // console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
               },
               ontimeupdate: function(timeupdate) {
                 var currentTime = timeupdate.currentTime;
@@ -59,7 +59,7 @@ function createDownBtn(ele){
                 currentTime = parseInt(currentTime);
                 duration = parseInt(duration);
 
-		            // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
+                // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
               },
               onended: function() {
                 handleList.SONG_LIST[0].votecount = 0;
@@ -108,6 +108,45 @@ return track
           if (handleList.SONG_LIST[i].songid == id) {
              var params = queryString();
 
+            if (delta > 0) {
+              if (handleList.SONG_LIST[i].upbtndisable == "False"){
+                if(handleList.SONG_LIST[i].downbtndisable == "True"){
+                  handleList.SONG_LIST[i].votecount += delta*2;
+                  delta = 2;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                  handleList.SONG_LIST[i].downbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].upbtndisable = "True";
+                } 
+              }
+              else{
+                handleList.SONG_LIST[i].votecount -= delta;
+                handleList.SONG_LIST[i].upbtndisable = "False";
+                delta = -1;
+              }
+            }
+            else {
+              if (handleList.SONG_LIST[i].downbtndisable == "False"){
+                if (handleList.SONG_LIST[i].upbtndisable == "True") {
+                    handleList.SONG_LIST[i].votecount += delta*2;
+                    delta = -2;
+                   handleList.SONG_LIST[i].downbtndisable = "True";
+                   handleList.SONG_LIST[i].upbtndisable = "False";
+                }
+                else{
+                  handleList.SONG_LIST[i].votecount += delta;
+                  handleList.SONG_LIST[i].downbtndisable = "True";
+                }
+              }
+              else{
+                handleList.SONG_LIST[i].votecount -= delta;
+                handleList.SONG_LIST[i].downbtndisable = "False";
+                delta = 1;
+              }
+            }
+
              $.ajax({ 
               beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -122,22 +161,7 @@ return track
                 success: function(response) { 
                   console.log("found playlist");
                   temp = JSON.parse(response);
-
-                  // if(temp["message"] == "error") {
-                  //   console.log('playlist does not exist');
-                  //   $('#playlistError').fadeTo('slow', 1);
-                  //  var t = setTimeout(function() {
-                  //   $('#playlistError').fadeTo('slow', 0);
-                  //     var f = setTimeout(function() {
-                  //       $('#playlistError').css("display", "none");
-                  //     }, 500);
-                  //   },3000);
-                  // }
-
-                  // else {
-                  // pid = temp["pid"];
-                  // window.location.href = '/?playlist='+pid;
-                  // }                          
+                         
                 },
                 error: function(e, x, r) { 
                   console.log("error - could not change vote");
@@ -145,40 +169,6 @@ return track
               });
 
 
-            if (delta > 0) {
-              if (handleList.SONG_LIST[i].upbtndisable == "False"){
-                if(handleList.SONG_LIST[i].downbtndisable == "True"){
-                  handleList.SONG_LIST[i].votecount += delta*2;
-                  handleList.SONG_LIST[i].upbtndisable = "True";
-                  handleList.SONG_LIST[i].downbtndisable = "False";
-                }
-                else{
-                  handleList.SONG_LIST[i].votecount += delta;
-                  handleList.SONG_LIST[i].upbtndisable = "True";
-                } 
-              }
-              else{
-                handleList.SONG_LIST[i].votecount -= delta;
-                handleList.SONG_LIST[i].upbtndisable = "False";
-              }
-            }
-            else {
-              if (handleList.SONG_LIST[i].downbtndisable == "False"){
-                if (handleList.SONG_LIST[i].upbtndisable == "True") {
-                  handleList.SONG_LIST[i].votecount += delta*2;
-                   handleList.SONG_LIST[i].downbtndisable = "True";
-                   handleList.SONG_LIST[i].upbtndisable = "False";
-                }
-                else{
-                  handleList.SONG_LIST[i].votecount += delta;
-                  handleList.SONG_LIST[i].downbtndisable = "True";
-                }
-              }
-              else{
-                handleList.SONG_LIST[i].votecount -= delta;
-                handleList.SONG_LIST[i].downbtndisable = "False";
-              }
-            }
           }
         }
 
