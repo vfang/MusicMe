@@ -100,8 +100,28 @@ function getCookie(name) {
       $(document).ready(function() {
         var params = queryString();
 
+        // Prevent default for 'enter'
+        $('#addSong').keypress(function(event){
+          if (event.keyCode == 13) {
+            // console.log('preventing default for enter');
+            event.preventDefault();
 
-        $('#addSong').submit(function(e) {
+            console.log('logging: ' + $('.searchResultContainer').children()[0].innerHTML);
+            var str = $('.searchResultContainer').children()[0].innerHTML;
+
+            current_song = str.match(/<b>(.*?)<\/b>/)[1]
+            current_artist = str.match(/<artist>(.*?)<\/artist>/)[1]
+
+            $("#enterbutton").click();
+            $('.searchResult').remove();
+            $('#songsearch').val('');
+
+          }
+        });
+
+
+        $('#addSong').submit(function(e) {     
+          console.log('hihihi');    
 
          $.ajax({ 
           beforeSend: function(xhr, settings) {
@@ -310,7 +330,7 @@ $(document).ready(function() {
               }
 
               $('.searchResult').click(function() {
-                //console.log($(this));
+                console.log('logging: ' + $(this));
 
                 current_song = $(this).data("title");
                 current_artist = $(this).data("artist");
@@ -325,6 +345,7 @@ $(document).ready(function() {
               });
 
               $("#clickedEnter").click(function() {
+                console.log('logging: ' + $('.searchResultContainer').children()[0].innerHTML);
                 var str = $('.searchResultContainer').children()[0].innerHTML;
 
                 current_song = str.match(/<b>(.*?)<\/b>/)[1]
@@ -349,12 +370,7 @@ $(document).ready(function() {
           }})}
 
         }    
-        else if(event.keyCode == 13) { //$("#clickedEnter").click(); }
-        event.preventDefault();
-        $("#clickedEnter").click();
-        console.log(current_song);
-        console.log('Enter!');
-      }
+
       },
       doneTypingInterval
       );
