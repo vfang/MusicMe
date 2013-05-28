@@ -1,3 +1,6 @@
+var current_artist;
+var current_song;
+
 var votes = new Object();
 
 function createUpvoteBtn(ele) {
@@ -120,21 +123,21 @@ return track
                   console.log("found playlist");
                   temp = JSON.parse(response);
 
-                  if(temp["message"] == "error") {
-                    console.log('playlist does not exist');
-                    $('#playlistError').fadeTo('slow', 1);
-                   var t = setTimeout(function() {
-                    $('#playlistError').fadeTo('slow', 0);
-                      var f = setTimeout(function() {
-                        $('#playlistError').css("display", "none");
-                      }, 500);
-                    },3000);
-                  }
+                  // if(temp["message"] == "error") {
+                  //   console.log('playlist does not exist');
+                  //   $('#playlistError').fadeTo('slow', 1);
+                  //  var t = setTimeout(function() {
+                  //   $('#playlistError').fadeTo('slow', 0);
+                  //     var f = setTimeout(function() {
+                  //       $('#playlistError').css("display", "none");
+                  //     }, 500);
+                  //   },3000);
+                  // }
 
-                  else {
-                  pid = temp["pid"];
-                  window.location.href = '/?playlist='+pid;
-                  }                          
+                  // else {
+                  // pid = temp["pid"];
+                  // window.location.href = '/?playlist='+pid;
+                  // }                          
                 },
                 error: function(e, x, r) { 
                   console.log("error - could not change vote");
@@ -287,7 +290,9 @@ function getCookie(name) {
           url : "/api/addSong/", 
           data : { 
             'playlist' : params.playlist,
-              'songsearch' : $("#songsearch").val() //$(this).serialize(),
+              'songsearch_artist' : current_artist,
+              'songsearch_song' : current_song,
+              // $("#songsearch").val() //$(this).serialize(),
             },
 
             success: function(response) {
@@ -471,6 +476,9 @@ $(document).ready(function() {
               matchingSong.className = "searchResult";
               matchingSong.innerHTML += '<b> '+data.results.trackmatches.track[song].name+'</b>, '+data.results.trackmatches.track[song].artist;
 
+              $(matchingSong).data("title", data.results.trackmatches.track[song].name);
+              $(matchingSong).data("artist", data.results.trackmatches.track[song].artist);
+
               $('.searchResultContainer').append(matchingSong);
 
               // add class to search result list
@@ -479,8 +487,14 @@ $(document).ready(function() {
             }
 
             $('.searchResult').click(function() {
-              //console.log($(this).text());
-              $("#songsearch").val($(this).text());
+              console.log($(this).text());
+
+              current_song = $(this).data("title");
+              current_artist = $(this).data("artist");
+
+              $("#enterbutton").click();
+
+              // $("#songsearch").val($(this).text());
               //Functionality for Searching for song.
               $('.searchResult').remove();
             });
