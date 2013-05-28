@@ -246,6 +246,34 @@ function queryString () {
   return query_string;
 };
 
+//Resizing for mobile
+ window.onresize = function(event) {
+//   //searchWidth = $("#search").css("width");
+//   //$('.searchResultContainer').css("width", searchWidth);  
+
+//   //winHeight = $(window).height();
+//   //maxHeight = 672;
+
+//   var isIpad = /iPad/i.test(navigator.userAgent);
+
+   if ($(window).width() <= "768" || /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+      console.log('mobile');
+      $('#playPlaylistBtn').css('font-size', '.9em');
+      $('#pausePlaylistBtn').css('font-size', '.9em');
+      $('#clickedEnter').css('font-size', '.9em');
+      $('#songsearch').css('font-size', '.9em');
+   }else
+   {     
+      $('#playPlaylistBtn').css('font-size', '1.25em');
+      $('#pausePlaylistBtn').css('font-size', '1.25em');
+      $('#clickedEnter').css('font-size', '1.25em');
+      $('#songsearch').css('font-size', '1.25em');
+   }
+
+//   }
+
+
+ }
 // using jQuery
 function getCookie(name) {
   var cookieValue = null;

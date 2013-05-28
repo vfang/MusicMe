@@ -1,3 +1,7 @@
+body{
+	background-image: url('../img/px.png')
+}
+
 #playlistarea {
 	float: left;
 	text-align: center;
@@ -20,6 +24,16 @@
 .songpanel{
 	padding: .75em;
 	position:	relative;
+	border-radius: 3px;
+}
+
+#songsearch {
+	font-size: 1.25em;
+}
+
+#clickedEnter {
+	font-size: 1.25em;
+	left: -10px;
 }
 
 #playPlaylistBtn {

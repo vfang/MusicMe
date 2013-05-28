@@ -123,6 +123,7 @@
     <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
     <div id="playlistarea" class="large-6 large-offset-3 columns end">
       <div id="playlist_video_area"></div>
+      <div>
       <div class="row">
 
         <div class="large-8 columns" style="width: 74%;">
@@ -130,7 +131,7 @@
           <!--  <form action="/add/?playlist={{pid}}" method="post"> -->
            <form action="" method="post" id="addSong">
             <!-- {% csrf_token %} -->
-          <input type="text" placeholder="Add a song to your playlist" id="songsearch"  style="font-size: 1.25em;" name="songsearch" autocomplete="off"/>
+          <input type="text" placeholder="Add a song to your playlist" id="songsearch" name="songsearch" autocomplete="off"/>
           <input type="hidden" id="pid" name="pid" />
           <div class="searchResultContainer"></div>
         </div>
@@ -138,11 +139,11 @@
           <!-- <a href="#" class="button small" css="float: left;">Submit</a> -->
            <input type="submit" value="Submit" class="" id="enterbutton" style="font-size: 1.25em; display: none;"/>
          </form>
-         <button type="" class="button small" id="clickedEnter" style="font-size: 1.25em;">Submit</button>
+         <button type="" class="button small" id="clickedEnter">Submit</button>
           <div class="message"></div>
       </div>
 
-      <div>
+      
         <button id="playPlaylistBtn" class="success" style="font-size: 1.25em;">Play All</button>
         <button id="pausePlaylistBtn" class="alert">Pause</button>
         <div id="addedSongNotif" style="display:none">Song added to playlist</div>
