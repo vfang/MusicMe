@@ -25,6 +25,10 @@
 
   <script src="{% static "playlist/js/vendor/custom.modernizr.js" %}"></script>
   <script type="text/javascript" src="{% static "playlist/js/vendor/jquery.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/jquery-cookie/jquery.cookie.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/cookiejar.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/musicplayer.js" %}"></script>
+  <script type="text/javascript" src="{% static "playlist/js/listhandler.js" %}"></script>
   <script type="text/javascript" src="{% static "playlist/js/musicme.js" %}"></script>
 
 
@@ -37,7 +41,9 @@
       {% if song_list %}
         {% autoescape off %}
           handleList.SONG_LIST = {{song_list}};
-          console.log(handleList.SONG_LIST);          
+          console.log(handleList.SONG_LIST);  
+
+          voteCookie.restoreVotes();        
           handleList.showList(handleList.SONG_LIST);
           // console.log(SONG_LIST);
         {% endautoescape %}
@@ -45,25 +51,6 @@
         handleList.SONG_LIST = [];
         console.log("Error: could not load song list.");
       {% endif %}
-      //handleList(SONG_LIST);
-      //console.log("OK");
-
-      // $("#addSong").submit(function() {
-      //   // e.preventDefault();
-      //   // console.log('hello')
-
-      //   $.ajax({
-      //     url: $(this).action('action'),
-      //     type: $(this).attr('method'),
-      //     data: $(this).serialize(),
-      //   }).done(function ( data ) {
-      //     // if( console && console.log ) {
-      //     //   console.log("Sample of data:", data);
-      //     // }
-      //   });
-
-
-      // });     
 
       }); 
 
