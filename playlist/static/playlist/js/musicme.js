@@ -462,53 +462,78 @@ $(document).ready(function() {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(
       function() {
-        if(event.keyCode == 13) { $("#enterbutton").click(); }
-        else if ((event.keyCode >= 48 && event.keyCode <= 122) || event.keyCode == 8) {
+        if ((event.keyCode >= 48 && event.keyCode <= 122) || event.keyCode == 8) {
           var query = $('#songsearch').val();
 
-          lastfm.track.search({track: query, limit: 15}, {success: function(data){
-            //console.log(data);
-            $('.searchResult').remove();
-            
-            for(var song in data.results.trackmatches.track){
-              //console.log('Song ::: ' + song);
-              var matchingSong = document.createElement('div');
-              matchingSong.className = "searchResult";
-              matchingSong.innerHTML += '<b> '+data.results.trackmatches.track[song].name+'</b>, '+data.results.trackmatches.track[song].artist;
-
-              $(matchingSong).data("title", data.results.trackmatches.track[song].name);
-              $(matchingSong).data("artist", data.results.trackmatches.track[song].artist);
-
-              $('.searchResultContainer').append(matchingSong);
-
-              // add class to search result list
-              //var key = data.results.trackmatches.track[song].name + ', ' + data.results.trackmatches.track[song].artist;
-              //SEARCH_RESULT_LIST[key] = data.results.trackmatches.track[song];
-            }
-
-            $('.searchResult').click(function() {
-              console.log($(this).text());
-
-              current_song = $(this).data("title");
-              current_artist = $(this).data("artist");
-
-              $("#enterbutton").click();
-
-              // $("#songsearch").val($(this).text());
-              //Functionality for Searching for song.
+          if (query == ''){
+          $('.searchResult').remove();
+        } else{
+            lastfm.track.search({track: query, limit: 15}, {success: function(data){
+              //console.log(data);
               $('.searchResult').remove();
-            });
+              
+              for(var song in data.results.trackmatches.track){
+                //console.log('Song ::: ' + song);
+                var matchingSong = document.createElement('div');
+                matchingSong.className = "searchResult";
+                matchingSong.innerHTML += '<b> '+data.results.trackmatches.track[song].name+'</b>, <artist>'+data.results.trackmatches.track[song].artist+"</artist>";
 
-            searchWidth = $("#songsearch").css("width");
-            $('.searchResultContainer').css("width", searchWidth);
+                $(matchingSong).data("title", data.results.trackmatches.track[song].name);
+                $(matchingSong).data("artist", data.results.trackmatches.track[song].artist);
 
-            $('#search').focus(function() {
-             $('.searchResultContainer').show();
-            }); 
+                $('.searchResultContainer').append(matchingSong);
 
-          }})
+                // add class to search result list
+                //var key = data.results.trackmatches.track[song].name + ', ' + data.results.trackmatches.track[song].artist;
+                //SEARCH_RESULT_LIST[key] = data.results.trackmatches.track[song];
+              }
 
-        }
+              $('.searchResult').click(function() {
+                //console.log($(this));
+
+                current_song = $(this).data("title");
+                current_artist = $(this).data("artist");
+
+                $("#enterbutton").click();
+
+                // $("#songsearch").val($(this).text());
+                //Functionality for Searching for song.
+                $('.searchResult').remove();
+
+                $('#songsearch').val('');
+              });
+
+              $("#clickedEnter").click(function() {
+                var str = $('.searchResultContainer').children()[0].innerHTML;
+
+                current_song = str.match(/<b>(.*?)<\/b>/)[1]
+                current_artist = str.match(/<artist>(.*?)<\/artist>/)[1]
+
+                $("#enterbutton").click();
+
+                $('.searchResult').remove();
+
+                $('#songsearch').val('');
+
+
+              });
+
+              searchWidth = $("#songsearch").css("width");
+              $('.searchResultContainer').css("width", searchWidth);
+
+              $('#search').focus(function() {
+               $('.searchResultContainer').show();
+              }); 
+
+          }})}
+
+        }    
+        else if(event.keyCode == 13) { //$("#clickedEnter").click(); }
+        event.preventDefault();
+        $("#clickedEnter").click();
+        console.log(current_song);
+        console.log('Enter!');
+      }
       },
       doneTypingInterval
       );
