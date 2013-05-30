@@ -26,6 +26,7 @@ function createDownBtn(ele){
   return "<div class='downvotebuttonContainer'><button type='button' class='tiny button radius downvotebutton' style='background-color: gray; border: gray;' id='down_" + ele.songid + "'>&#x25BC;</button></div>";
 }
 
+<<<<<<< HEAD
 (function( musicPlayer, $, undefined){
 
   musicPlayer.curTrackObject = null;
@@ -40,9 +41,9 @@ function createDownBtn(ele){
       //box-shadow: 1px 2px 4px 2px #222,
       autoplay:1,
       disabledResolvers: [
-      "SpotifyMetadata"
+      "SoundCloud", "SpotifyMetadata"
 
-            // options: "Soundcloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
+            // options: "SoundCloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
             ],
             handlers: {
               onloaded: function() {
@@ -224,7 +225,8 @@ return track
       };
   }( window.handleList = window.handleList || {}, jQuery ));
 
-
+=======
+>>>>>>> efd479c821fc252eaaf844ad7c95a3985ea965c3
 function queryString () {
   // This function is anonymous, is executed immediately and 
   // the return value is assigned to QueryString!
@@ -459,7 +461,6 @@ function getCookie(name) {
         musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
         $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
       }
-      musicPlayer.setPlaying = true;
       musicPlayer.curTrackObject.play();
 
     });
@@ -467,7 +468,6 @@ function getCookie(name) {
 
     $('#pausePlaylistBtn').click(function() {
       musicPlayer.setPaused = true;
-      musicPlayer.setPlaying = false;
       $(this).css("display","none");
       $("#playPlaylistBtn").css("display","block");
 
