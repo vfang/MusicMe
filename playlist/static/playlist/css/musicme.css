@@ -183,3 +183,73 @@ background-image: linear-gradient(-180deg, #fff 0%, #333 250%);
 	margin-bottom: 5px;
 }
 
+.addButton {
+	width: 35px;
+ 	height: 35px;
+ 	border-radius: 5px;
+ 	border: none;
+ 	
+ 	background-color: #fff;
+ 	margin: 5px 0 0 35px;
+ 	padding: 0;
+ 	color: #264040;
+ 	font-size: 12px;
+
+ 	float: left;
+ 	position: relative;
+ 	overflow: hidden;
+
+}
+
+@media only screen and (max-width: 768px) {
+	.addButton {
+		margin: 5px 0 0 10px;
+	}
+
+}
+
+.addButton:hover{
+	width: 35px;
+ 	height: 35px;
+ 	border-radius: 5px;
+ 	border: none; 	
+ 	background-color: #fff;
+ 	margin: 5px 0 0 35px;
+ 	padding: 0;
+ 	color: #264040;
+ 	font-size: 12px;
+
+ 	float: left;
+ 	position: relative;
+ 	overflow: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+	.addButton:hover {
+		margin: 5px 0 0 10px;
+	}
+}
+
+.searchContainer {
+	width: 90%;
+	height: 50px;
+	margin: 0 auto;
+	margin-bottom: 25px;
+	background-color: #FFF;
+	border-radius: 5px;
+	padding: 1px;
+}
+
+#songsearch {
+	display: block;
+	overflow: hidden;
+	border: none;
+	box-shadow: none;
+	margin-right: 20px;
+}
+@media only screen and (max-width: 768px) {
+	#songsearch {
+		width: 100%;
+		margin-top: 5px;
+	}
+}
