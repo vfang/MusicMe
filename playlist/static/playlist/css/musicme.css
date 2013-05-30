@@ -7,6 +7,10 @@ body{
 	text-align: center;
 }
 
+#playlist_video_area{
+	margin-bottom: 10px;
+}
+
 .songinfo {
 	float: left;
 }
@@ -29,11 +33,13 @@ body{
 
 #songsearch {
 	font-size: 1.25em;
+	border-radius: 3px;
 }
 
 #clickedEnter {
 	font-size: 1.25em;
 	left: -10px;
+	border-radius: 3px;
 }
 
 #playPlaylistBtn {
@@ -41,6 +47,7 @@ body{
 	display: block;
 	top: -13px;
 	font-size: 1.25em;
+	border-radius: 3px;
 }
 
 #pausePlaylistBtn {
@@ -48,6 +55,7 @@ body{
 	display: none;
 	top: -13px; 
 	font-size: 1.25em;
+	border-radius: 3px;
 }
 
 #songInf {

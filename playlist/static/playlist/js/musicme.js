@@ -37,6 +37,7 @@ function createDownBtn(ele){
     var track = window.tomahkAPI.Track(track_ele.songtitle,track_ele.artist, {
       width:300,
       height:300,
+      //box-shadow: 1px 2px 4px 2px #222,
       autoplay:1,
       disabledResolvers: [
       "SoundCloud", "SpotifyMetadata"
