@@ -58,21 +58,21 @@ background-image: linear-gradient(-180deg, #fff 0%, #333 250%);
 	border-radius: 3px;
 }
 
-#plusSign {
-	width: 8%;
-	height: 60%;
-	position: absolute;
-	top: 5%;
-	right: 3%;
-	background: url('../img/plus.png') no-repeat;
-	background-size: 90%;
-
+#searchWrapper{
+	width: 100%;
+	height: 100%;
+	position: relative;
 }
 
 #clickedEnter {
-	font-size: 1.25em;
-	left: -10px;
-	border-radius: 3px;
+	width: 35px;
+ 	height: 80%;
+ 	top: 10%;
+ 	border: none;
+ 	float: right;	
+ 	background-color: transparent;
+ 	padding: 0;
+ 	border-left: 1px solid rgba(70, 70, 70, .4);
 }
 
 #playPlaylistBtn {
@@ -174,45 +174,12 @@ background-image: linear-gradient(-180deg, #fff 0%, #333 250%);
 	margin-bottom: 5px;
 }
 
-.addButton {
-	width: 35px;
- 	height: 35px;
- 	border-radius: 5px;
- 	border: none;
- 	
- 	background-color: #fff;
- 	margin: 5px 0 0 35px;
- 	padding: 0;
- 	color: #264040;
- 	font-size: 12px;
-
- 	float: left;
- 	position: relative;
- 	overflow: hidden;
-
-}
 
 @media only screen and (max-width: 768px) {
 	.addButton {
 		margin: 5px 0 0 10px;
 	}
 
-}
-
-.addButton:hover{
-	width: 35px;
- 	height: 35px;
- 	border-radius: 5px;
- 	border: none; 	
- 	background-color: #fff;
- 	margin: 5px 0 0 35px;
- 	padding: 0;
- 	color: #264040;
- 	font-size: 12px;
-
- 	float: left;
- 	position: relative;
- 	overflow: hidden;
 }
 
 @media only screen and (max-width: 768px) {
@@ -239,11 +206,12 @@ background-image: linear-gradient(-180deg, #fff 0%, #333 250%);
 	z-index: 1;
 	background-image: url('../img/px.png');
 	top: 105%;
+
 }
 
 .searchResult{
 	/*border: 1px solid black;*/
-	margin: 2px;
+	margin: 5px;
 	padding: 5px;
 	//background-color: #f2f2f2;
 	background-image: -o-linear-gradient(-90deg, #FFF 0%, #333 250%);
