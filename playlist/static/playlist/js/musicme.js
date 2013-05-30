@@ -240,6 +240,7 @@ function getCookie(name) {
         musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
         $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
       }
+      musicPlayer.setPlaying = true;
       musicPlayer.curTrackObject.play();
 
     });
@@ -247,6 +248,7 @@ function getCookie(name) {
 
     $('#pausePlaylistBtn').click(function() {
       musicPlayer.setPaused = true;
+      musicPlayer.setPlaying = false;
       $(this).css("display","none");
       $("#playPlaylistBtn").css("display","block");
 

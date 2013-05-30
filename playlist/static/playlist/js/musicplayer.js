@@ -43,12 +43,18 @@
               },
               onpause: function() {
               // only allow pausing via pause all button
-              console.log(musicPlayer);
-              if (musicPlayer.setPaused == false) {
-                musicPlayer.curTrackObject.play();
+                if (musicPlayer.setPaused == false) {
+                  musicPlayer.curTrackObject.play();
+                }
+              },
+              onplay: function() {
+                // only allow playing via play all button
+                if (musicPlayer.setPlaying == false) {
+                  musicPlayer.setPaused = true;
+                  musicPlayer.curTrackObject.pause();
+                }
               }
             }
-          }
         });
 return track
 }
