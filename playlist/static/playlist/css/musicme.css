@@ -169,15 +169,6 @@ background-image: linear-gradient(-180deg, #fff 0%, #333 250%);
 	color: #fff;
 }
 
-.searchResult{
-	/*border: 1px solid black;*/
-	margin: 2px;
-	padding: 5px;
-	background-color: #f2f2f2;
-	border-radius: 2px;
-	font-size: 13px;	
-}
-
 
 #songsearch {
 	margin-bottom: 5px;
@@ -231,13 +222,46 @@ background-image: linear-gradient(-180deg, #fff 0%, #333 250%);
 }
 
 .searchContainer {
-	width: 90%;
+	width: 94%;
 	height: 50px;
 	margin: 0 auto;
 	margin-bottom: 25px;
 	background-color: #FFF;
 	border-radius: 5px;
 	padding: 1px;
+	position: relative;
+}
+
+.searchResultContainer{
+	width: 100%;
+	left: 0%;
+	position: absolute;
+	z-index: 1;
+	background-image: url('../img/px.png');
+	top: 105%;
+}
+
+.searchResult{
+	/*border: 1px solid black;*/
+	margin: 2px;
+	padding: 5px;
+	//background-color: #f2f2f2;
+	background-image: -o-linear-gradient(-90deg, #FFF 0%, #333 250%);
+	background-image: -moz-linear-gradient(-90deg, #fff 0%, #333 250%);
+	background-image: -webkit-linear-gradient(-90deg, #fff 0%, #333 250%);
+	background-image: -ms-linear-gradient(-90deg, #fff 0%, #333 250%);
+	background-image: linear-gradient(-180deg, #fff 0%, #333 250%);
+	border-radius: 2px;
+	font-size: 13px;	
+}
+
+.searchResult:hover{
+	text-decoration: underline;
+	background-image: -o-linear-gradient(-90deg, #333 -150%, #fff 100%);
+	background-image: -moz-linear-gradient(-90deg, #333 -150%, #fff 100%);
+	background-image: -webkit-linear-gradient(-90deg, #333 -150%, #fff 100%);
+	background-image: -ms-linear-gradient(-90deg, #333 -150%, #fff 100%);
+	background-image: linear-gradient(-180deg, #333 -150%, #fff 100%);
 }
 
 #songsearch {

@@ -561,8 +561,6 @@ $(document).ready(function() {
 
               });
 
-              searchWidth = $("#songsearch").css("width");
-              $('.searchResultContainer').css("width", searchWidth);
 
               $('#search').focus(function() {
                $('.searchResultContainer').show();
