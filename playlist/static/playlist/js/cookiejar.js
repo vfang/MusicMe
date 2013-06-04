@@ -33,6 +33,8 @@
 
 	voteCookie.restoreVotes = function() {
 		var songmap = voteCookie.getSongmap();
+		console.log(handleList.SONG_LIST);
+		console.log("songmap = ", songmap);
 	      for (var i in handleList.SONG_LIST) {
 	        var song = handleList.SONG_LIST[i];
 	        if (songmap[song.songid] != undefined) {
@@ -46,6 +48,7 @@
 	          }
 	        }
 	      }
+	      console.log("votes restored.");
 	}
 
 }( window.voteCookie = window.voteCookie || {}, jQuery ));
