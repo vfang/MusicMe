@@ -1,5 +1,7 @@
 $.getScript("static/playlist/js/cookiejar.js");
 
+$.getScript("static/playlist/js/musicme.js");
+
 /* Proper coding practice: http://enterprisejquery.com/2010/10/how-good-c-habits-can-encourage-bad-javascript-habits-part-1/ */
 //Self-Executing Anonymous Func: Part 2 (Public & Private)
 (function( handleList, $, undefined){
@@ -110,6 +112,11 @@ $.getScript("static/playlist/js/cookiejar.js");
       }
 
       handleList.showList = function(list) {
+
+        console.log("start showlist");
+        console.log(list);
+        console.log("end showlist");
+
         var html = "";
         list.sort(function(a,b) {
           if (a.votecount > b.votecount)
