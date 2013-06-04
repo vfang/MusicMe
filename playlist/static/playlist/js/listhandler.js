@@ -113,9 +113,9 @@ $.getScript("static/playlist/js/musicme.js");
 
       handleList.showList = function(list) {
 
-        console.log("start showlist");
-        console.log(list);
-        console.log("end showlist");
+        // console.log("start showlist");
+        // console.log(list);
+        // console.log("end showlist");
 
         var html = "";
         list.sort(function(a,b) {

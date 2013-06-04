@@ -4,6 +4,69 @@ var current_song;
 var votes = new Object();
 
 
+function hihihi() {
+ var params = queryString();
+ $.ajax({ 
+  beforeSend: function(xhr, settings) {
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+  },          
+  type : 'POST', 
+  url : "/api/addSong/", 
+  data : { 
+    'playlist' : params.playlist,
+      'songsearch_artist' : current_artist,
+      'songsearch_song' : current_song,
+      // $("#songsearch").val() //$(this).serialize(),
+    },
+
+    success: function(response) {
+      temp = JSON.parse(response);
+      // console.log(temp["message"]);
+      if(temp["message"] == "error - duplicate entry") {
+        console.log("ERROR: Entry already exists");
+        $('#addedSongNotifError').fadeTo('slow', 1);
+           var t = setTimeout(function() {
+            $('#addedSongNotifError').fadeTo('slow', 0);
+            var f = setTimeout(function() {
+              $('#addedSongNotifError').css("display", "none");
+            }, 500);
+          },3000);
+
+      }
+      else { 
+        console.log("added song");
+        $.getJSON(
+          '/api/getPlaylist/?playlist=' + params.playlist, 
+          function(data) { 
+            if(handleList.SONG_LIST){                
+              handleList.SONG_LIST.push(data[data.length -1]);                 
+              clearList(); 
+              handleList.showList(handleList.SONG_LIST);
+            } else {
+              var tempList = data[data.length -1];
+              handleList.showList(tempList);
+            }
+            
+           $('#addedSongNotif').fadeTo('slow', 1);
+           var t = setTimeout(function() {
+            $('#addedSongNotif').fadeTo('slow', 0);
+            var f = setTimeout(function() {
+              $('#addedSongNotif').css("display", "none");
+            }, 500);
+          },3000);
+
+
+          });
+      }
+
+    },
+    error: function(e, x, r) { 
+      console.log("error - could not add song");
+    }
+  });  
+
+}
+
 
 function createUpvoteBtn(ele) {
   return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>&#x25B2;</button></div>";
@@ -104,6 +167,7 @@ function getCookie(name) {
 
         // Prevent default for 'enter'
         $('#addSong').keypress(function(event){
+
           if (event.keyCode == 13) {
             // console.log('preventing default for enter');
             event.preventDefault();
@@ -114,7 +178,8 @@ function getCookie(name) {
             current_song = str.match(/<b>(.*?)<\/b>/)[1]
             current_artist = str.match(/<artist>(.*?)<\/artist>/)[1]
 
-            $("#enterbutton").click();
+            hihihi();
+            //$("#enterbutton").click();
             $('.searchResult').remove();
             $('#songsearch').val('');
 
@@ -122,70 +187,14 @@ function getCookie(name) {
         });
 
 
-        $('#addSong').submit(function(e) {     
-          console.log('hihihi');    
+       //  $('#addSong').submit(function(e) {     
+       //    // console.log('hihihi');    
+  
+       //    // add stuff here!!
+       //    hihihi();               
 
-         $.ajax({ 
-          beforeSend: function(xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-          },          
-          type : 'POST', 
-          url : "/api/addSong/", 
-          data : { 
-            'playlist' : params.playlist,
-              'songsearch_artist' : current_artist,
-              'songsearch_song' : current_song,
-              // $("#songsearch").val() //$(this).serialize(),
-            },
-
-            success: function(response) {
-              temp = JSON.parse(response);
-              // console.log(temp["message"]);
-              if(temp["message"] == "error - duplicate entry") {
-                console.log("ERROR: Entry already exists");
-                $('#addedSongNotifError').fadeTo('slow', 1);
-                   var t = setTimeout(function() {
-                    $('#addedSongNotifError').fadeTo('slow', 0);
-                    var f = setTimeout(function() {
-                      $('#addedSongNotifError').css("display", "none");
-                    }, 500);
-                  },3000);
-
-              }
-              else { 
-                console.log("added song");
-                $.getJSON(
-                  '/api/getPlaylist/?playlist=' + params.playlist, 
-                  function(data) { 
-                    if(handleList.SONG_LIST){                
-                      handleList.SONG_LIST.push(data[data.length -1]);                 
-                      clearList(); 
-                      handleList.showList(handleList.SONG_LIST);
-                    } else {
-                      var tempList = data[data.length -1];
-                      handleList.showList(tempList);
-                    }
-                    
-                   $('#addedSongNotif').fadeTo('slow', 1);
-                   var t = setTimeout(function() {
-                    $('#addedSongNotif').fadeTo('slow', 0);
-                    var f = setTimeout(function() {
-                      $('#addedSongNotif').css("display", "none");
-                    }, 500);
-                  },3000);
-
-
-                  });
-              }
-
-            },
-            error: function(e, x, r) { 
-              console.log("error - could not add song");
-            }
-          });                 
-
-         return false;
-       });
+       //   return false;
+       // });
       
       $('#goToPlaylist').submit(function(e) {
         console.log($("#goToPlaylists").val());
@@ -234,14 +243,14 @@ function getCookie(name) {
          return false;
        });
 
-    var tid= setInterval(mycode, 5000);
+    var tid= setInterval(mycode, 1000);
 
     function mycode() {
       $.ajax({
         url: "/api/getPlaylist/?playlist=" + params.playlist
 
       }).done(function(response) {
-        console.log(response);
+        // console.log(response);
         clearList(); 
         handleList.showList(response);
         handleList.SONG_LIST=response;
@@ -337,13 +346,16 @@ $(document).ready(function() {
                 //SEARCH_RESULT_LIST[key] = data.results.trackmatches.track[song];
               }
 
-              $('.searchResult').click(function() {
+              $('.searchResult').click(function(event) {
+                event.preventDefault();
                 console.log('logging: ' + $(this));
 
                 current_song = $(this).data("title");
                 current_artist = $(this).data("artist");
 
-                $("#enterbutton").click();
+
+                hihihi();
+                // $("#enterbutton").click();
 
                 // $("#songsearch").val($(this).text());
                 //Functionality for Searching for song.
@@ -359,7 +371,8 @@ $(document).ready(function() {
                 current_song = str.match(/<b>(.*?)<\/b>/)[1]
                 current_artist = str.match(/<artist>(.*?)<\/artist>/)[1]
 
-                $("#enterbutton").click();
+                hihihi();
+                //$("#enterbutton").click();
 
                 $('.searchResult').remove();
 

@@ -21,6 +21,32 @@
               },
               onplayable: function() {
                 // console.log(track.connection+":\n  playable");
+
+                var id = handleList.SONG_LIST[0].songid;
+
+                var params = queryString();
+                $.ajax({ 
+                  beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                  },          
+                  type : 'POST', 
+                  url : "/api/deleteSong/", 
+                  data : { 
+                    'playlist' : params.playlist,
+                    'songid' : id,                                  
+                  },
+                  success: function(response) { 
+                    console.log("found playlist");
+                    temp = JSON.parse(response);
+
+                  },
+                  error: function(e, x, r) { 
+                    console.log("error - could not change vote");
+                  }
+                });
+
+
+
               },
               onresolved: function(resolver, result) {
                 // console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
@@ -41,33 +67,10 @@
                 // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
               },
               onended: function() {
-                var params = queryString();
+                
 
-                var currVote = handleList.SONG_LIST[0].votecount;
-                var id = handleList.SONG_LIST[0].songid;                
-                handleList.SONG_LIST[0].votecount = 0;
-
-                $.ajax({ 
-                  beforeSend: function(xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                  },          
-                  type : 'POST', 
-                  url : "/api/changeVote/", 
-                  data : { 
-                    'playlist' : params.playlist,
-                    'songid' : id,
-                    'delta' : -currVote                  
-                  },
-                  success: function(response) { 
-                    console.log("found playlist");
-                    temp = JSON.parse(response);
-
-                  },
-                  error: function(e, x, r) { 
-                    console.log("error - could not change vote");
-                  }
-                });
-
+                // var currVote = handleList.SONG_LIST[0].votecount;
+                // handleList.SONG_LIST[0].votecount = 0;
                 $("#playlist").empty();
                 handleList.showList(handleList.SONG_LIST);
 
@@ -89,7 +92,7 @@
 
                 var t = setTimeout(function() {
                   track.seek(200000);
-                }, 5000);
+                }, 15000);
 
               }
             }
