@@ -2,6 +2,17 @@ html, body{
 	background-image: url('../img/px.png')
 }
 
+h2 {
+	color: white; 
+	font-weight: lighter;
+	line-height: 27px;
+	text-shadow: 1px 4px 3px #222, 0 0 0 #000, 1px 4px 3px #222;
+}
+
+#intro {
+	color: #fff;
+}
+
 #playlistarea {
 	float: left;
 	text-align: center;
@@ -17,7 +28,7 @@ html, body{
 	font-weight: lighter;
 	line-height: 27px;
 	text-shadow: 1px 4px 3px #222, 0 0 0 #000, 1px 4px 3px #222;
-	//text-shadow: -1px -1px 3px #222;
+	/*//text-shadow: -1px -1px 3px #222;*/
 }
 
 .songinfo {
