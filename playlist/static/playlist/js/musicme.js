@@ -138,7 +138,7 @@ function getCookie(name) {
 
             success: function(response) {
               temp = JSON.parse(response);
-
+              // console.log(temp["message"]);
               if(temp["message"] == "error - duplicate entry") {
                 console.log("ERROR: Entry already exists");
                 $('#addedSongNotifError').fadeTo('slow', 1);
@@ -240,6 +240,9 @@ function getCookie(name) {
 
       }).done(function(response) {
         console.log(response);
+        clearList(); 
+        handleList.showList(response);
+
       });
     }
     function abortTimer () {
