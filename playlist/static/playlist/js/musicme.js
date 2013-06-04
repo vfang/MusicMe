@@ -255,6 +255,9 @@ function getCookie(name) {
         handleList.showList(response);
         handleList.SONG_LIST=response;
 
+        voteCookie.restoreVotes();
+        console.log("votes restored from cookie");
+
       });
     }
     function abortTimer () {
