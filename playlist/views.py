@@ -130,4 +130,13 @@ def changeVote(request):
 		song.save()
 
 	return HttpResponse(json.dumps({'message': 'success', 'pid' : pid}))
-	
+
+def deleteSong(request):
+	pid = request.POST.get('playlist')
+	sid = request.POST.get('songid')
+
+	song = Song.objects.get(playlist=pid, songid=sid)
+
+	if song:
+		song.delete()
+	return HttpResponse(json.dumps({'message': 'success', 'pid' : pid}))
