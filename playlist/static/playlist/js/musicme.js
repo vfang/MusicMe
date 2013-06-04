@@ -3,6 +3,8 @@ var current_song;
 
 var votes = new Object();
 
+
+
 function createUpvoteBtn(ele) {
   return "<div class='upvotebuttonContainer'><button type='button' class='tiny button radius upvotebutton' style='background-color: gray; border: gray;' id='up_" + ele.songid + "'>&#x25B2;</button></div>";
 }
@@ -242,6 +244,7 @@ function getCookie(name) {
         console.log(response);
         clearList(); 
         handleList.showList(response);
+        handleList.SONG_LIST=response;
 
       });
     }

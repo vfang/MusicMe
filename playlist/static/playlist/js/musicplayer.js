@@ -31,6 +31,13 @@
                 currentTime = parseInt(currentTime);
                 duration = parseInt(duration);
 
+
+                //For DEMO only
+                if($('#progress_bar').width() > '10%'){
+                  console.log('MOOOOOO')
+                  musicPlayer.curTrackObject.seek(50000);
+                }
+
                 // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
               },
               onended: function() {
