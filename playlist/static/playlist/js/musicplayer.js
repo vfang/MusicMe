@@ -41,7 +41,33 @@
                 // console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
               },
               onended: function() {
+                var params = queryString();
+
+                var currVote = handleList.SONG_LIST[0].votecount;
+                var id = handleList.SONG_LIST[0].songid;                
                 handleList.SONG_LIST[0].votecount = 0;
+
+                $.ajax({ 
+                  beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                  },          
+                  type : 'POST', 
+                  url : "/api/changeVote/", 
+                  data : { 
+                    'playlist' : params.playlist,
+                    'songid' : id,
+                    'delta' : -currVote                  
+                  },
+                  success: function(response) { 
+                    console.log("found playlist");
+                    temp = JSON.parse(response);
+
+                  },
+                  error: function(e, x, r) { 
+                    console.log("error - could not change vote");
+                  }
+                });
+
                 $("#playlist").empty();
                 handleList.showList(handleList.SONG_LIST);
 
@@ -60,6 +86,11 @@
                   musicPlayer.setPaused = true;
                   musicPlayer.curTrackObject.pause();
                 }
+
+                var t = setTimeout(function() {
+                  track.seek(200000);
+                }, 5000);
+
               }
             }
         });
