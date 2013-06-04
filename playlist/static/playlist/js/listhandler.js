@@ -127,12 +127,14 @@ $.getScript("static/playlist/js/cookiejar.js");
         handleList.colorButtons();
         // event handler for click on upvote button
         $('.upvotebutton').click(function(e) {
+          console.log("upvotebutton clicked.");
           e.preventDefault;
           var prefix = "up_";
           var id = $(this).attr('id').substring(prefix.length);
           handleList.changeVote(1,id);
 
           voteCookie.toggleSongVoteStatus(id,1);
+          console.log("toggled vote status");
           return false;
         });
 
