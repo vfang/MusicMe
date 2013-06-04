@@ -163,7 +163,7 @@ function getCookie(name) {
                       var tempList = data[data.length -1];
                       handleList.showList(tempList);
                     }
-
+                    
                    $('#addedSongNotif').fadeTo('slow', 1);
                    var t = setTimeout(function() {
                     $('#addedSongNotif').fadeTo('slow', 0);
