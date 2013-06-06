@@ -60,6 +60,7 @@
                 var id = handleList.SONG_LIST[0].songid;
 
                 var params = queryString();
+                console.log("SOMETHING");
                 $.ajax({ 
                   beforeSend: function(xhr, settings) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -86,6 +87,7 @@
                   console.log("no more songs");
                   musicPlayer.setPaused = true;
                   musicPlayer.curTrackObject.pause();
+                  musicPlayer.setStarted = false;
                   $('#pausePlaylistBtn').css("display","none");
                   $("#playPlaylistBtn").css("display","block");
                   $("#playlist_video_area").empty();
@@ -105,7 +107,7 @@
                 }
 
                 var t = setTimeout(function() {
-                  track.seek(200000);
+               //   track.seek(200000);
                 }, 15000);
 
               }
