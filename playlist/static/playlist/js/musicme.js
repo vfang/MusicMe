@@ -23,6 +23,9 @@ function hihihi() {
       temp = JSON.parse(response);
       // console.log(temp["message"]);
       if(temp["message"] == "error - duplicate entry") {
+
+        handleList.changeVote(1, temp["songid"]); // up vote duplicate songs
+
         console.log("ERROR: Entry already exists");
         $('#addedSongNotifError').fadeTo('slow', 1);
            var t = setTimeout(function() {
@@ -298,6 +301,7 @@ function getCookie(name) {
                   }
                 });
         musicPlayer.setStarted = true;
+        console.log('AHHHH');
         musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
         $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
       }
