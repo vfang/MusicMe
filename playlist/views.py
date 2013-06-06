@@ -51,7 +51,8 @@ def addSong(request):
 	# FIX - check for existing songs with artist/title before creating
 	if Song.objects.filter(artist__iexact=songArtist, title__iexact=songTitle, playlist_id=pid):
 		print 'ERROR: %s already exists' % (songTitle)
-		return HttpResponse(json.dumps({'message': 'error - duplicate entry'}))
+		existingSong = Song.objects.get(artist__iexact=songArtist, title__iexact=songTitle, playlist_id=pid)
+		return HttpResponse(json.dumps({'message': 'error - duplicate entry', 'songid' : existingSong.songid}))
 	else:
 
 		song, created = Song.objects.get_or_create(artist=songArtist, title=songTitle, songid=key, playlist_id=pid)
