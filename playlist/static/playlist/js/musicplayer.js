@@ -11,7 +11,7 @@
       height:300,
       autoplay:1,
       disabledResolvers: [
-      "SoundCloud", "SpotifyMetadata"
+      "SoundCloud", "SpotifyMetadata", "Youtube"
 
             // options: "SoundCloud", "Officialfm", "Lastfm", "Jamendo", "Youtube", "Rdio", "SpotifyMetadata", "Deezer", "Exfm"
             ],
@@ -53,6 +53,8 @@
                 $("#playlist").empty();
                 handleList.showList(handleList.SONG_LIST);
 
+                console.log('LENGTH: ' + handleList.SONG_LIST.length);
+                if (handleList.SONG_LIST.length > 0) {
                 musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
 
                 var id = handleList.SONG_LIST[0].songid;
@@ -79,6 +81,15 @@
                 });
 
                 $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
+                } else {
+                  
+                  console.log("no more songs");
+                  musicPlayer.setPaused = true;
+                  musicPlayer.curTrackObject.pause();
+                  $('#pausePlaylistBtn').css("display","none");
+                  $("#playPlaylistBtn").css("display","block");
+                  $("#playlist_video_area").empty();
+                }
               },
               onpause: function() {
               // only allow pausing via pause all button
