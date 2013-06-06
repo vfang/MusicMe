@@ -259,7 +259,7 @@ function getCookie(name) {
         handleList.SONG_LIST=response;
 
         voteCookie.restoreVotes();
-        console.log("votes restored from cookie");
+       // console.log("votes restored from cookie");
 
       });
     }
