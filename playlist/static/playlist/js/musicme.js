@@ -274,6 +274,29 @@ function getCookie(name) {
       console.log(musicPlayer);
 
       if (musicPlayer.setStarted == false) {
+                        
+                var id = handleList.SONG_LIST[0].songid;
+
+                var params = queryString();
+                $.ajax({ 
+                  beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                  },          
+                  type : 'POST', 
+                  url : "/api/deleteSong/", 
+                  data : { 
+                    'playlist' : params.playlist,
+                    'songid' : id,                                  
+                  },
+                  success: function(response) { 
+                    console.log("found playlist");
+                    temp = JSON.parse(response);
+
+                  },
+                  error: function(e, x, r) { 
+                    console.log("error - could not change vote");
+                  }
+                });
         musicPlayer.setStarted = true;
         musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
         $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());

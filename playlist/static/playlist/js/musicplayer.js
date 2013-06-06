@@ -18,32 +18,11 @@
             handlers: {
               onloaded: function() {
                 // console.log(track.connection+":\n  api loaded");
+
+
               },
               onplayable: function() {
                 // console.log(track.connection+":\n  playable");
-
-                var id = handleList.SONG_LIST[0].songid;
-
-                var params = queryString();
-                $.ajax({ 
-                  beforeSend: function(xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                  },          
-                  type : 'POST', 
-                  url : "/api/deleteSong/", 
-                  data : { 
-                    'playlist' : params.playlist,
-                    'songid' : id,                                  
-                  },
-                  success: function(response) { 
-                    console.log("found playlist");
-                    temp = JSON.parse(response);
-
-                  },
-                  error: function(e, x, r) { 
-                    console.log("error - could not change vote");
-                  }
-                });
 
 
 
@@ -75,6 +54,30 @@
                 handleList.showList(handleList.SONG_LIST);
 
                 musicPlayer.curTrackObject = musicPlayer.createTrackObject(handleList.SONG_LIST[0]);
+
+                var id = handleList.SONG_LIST[0].songid;
+
+                var params = queryString();
+                $.ajax({ 
+                  beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                  },          
+                  type : 'POST', 
+                  url : "/api/deleteSong/", 
+                  data : { 
+                    'playlist' : params.playlist,
+                    'songid' : id,                                  
+                  },
+                  success: function(response) { 
+                    console.log("found playlist");
+                    temp = JSON.parse(response);
+
+                  },
+                  error: function(e, x, r) { 
+                    console.log("error - could not change vote");
+                  }
+                });
+
                 $("#playlist_video_area").empty().append(musicPlayer.curTrackObject.render());
               },
               onpause: function() {
