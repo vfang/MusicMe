@@ -51,4 +51,17 @@
 	      // console.log("votes restored.");
 	}
 
+	voteCookie.deleteSong = function(songid) {
+		if (SONGMAP[songid] == undefined) {
+			console.log("Error: can't delete a song from cookie that doesn't exist to begin with");
+			return
+		} else {
+			console.log("Deleting song from cookie")
+			SONGMAP[songid] = undefined
+		}
+		// set cookie
+		$.cookie(voteCookie.NAME,JSON.stringify(SONGMAP));
+		console.log("cookie value: ",$.cookie(voteCookie.NAME));
+	}
+
 }( window.voteCookie = window.voteCookie || {}, jQuery ));

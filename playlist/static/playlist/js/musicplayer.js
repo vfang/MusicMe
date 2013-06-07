@@ -74,7 +74,7 @@
                   success: function(response) { 
                     console.log("found playlist");
                     temp = JSON.parse(response);
-
+                    voteCookie.deleteSong(id)
                   },
                   error: function(e, x, r) { 
                     console.log("error - could not change vote");
